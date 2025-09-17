@@ -18,7 +18,7 @@ import { companyRouter } from './routes/company';
 dotenv.config();
 
 const app = express();
-const PORT = process.env['PORT'] || 3000;
+const PORT = process.env['PORT'] || 8080;
 
 // Security middleware
 app.use(helmet());
@@ -76,24 +76,22 @@ app.use('*', (req, res) => {
 // Error handling middleware
 app.use(errorHandler);
 
-// Start server only in local development
-if (process.env['NODE_ENV'] !== 'production') {
-  app.listen(PORT, () => {
-    logger.info(`🚀 FisAiSalesServer running on port ${PORT}`);
-    logger.info(`Environment: ${process.env['NODE_ENV'] || 'development'}`);
-    logger.info(`Health check: http://localhost:${PORT}/api/health`);
-  });
+// Start server (Firebase App Hosting needs this, Vercel ignores it)
+app.listen(PORT, () => {
+  logger.info(`🚀 FisAiSalesServer running on port ${PORT}`);
+  logger.info(`Environment: ${process.env['NODE_ENV'] || 'development'}`);
+  logger.info(`Health check: http://localhost:${PORT}/api/health`);
+});
 
-  // Graceful shutdown
-  process.on('SIGTERM', () => {
-    logger.info('SIGTERM received, shutting down gracefully');
-    process.exit(0);
-  });
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received, shutting down gracefully');
+  process.exit(0);
+});
 
-  process.on('SIGINT', () => {
-    logger.info('SIGINT received, shutting down gracefully');
-    process.exit(0);
-  });
-}
+process.on('SIGINT', () => {
+  logger.info('SIGINT received, shutting down gracefully');
+  process.exit(0);
+});
 
 export default app;
