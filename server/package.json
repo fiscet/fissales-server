@@ -5,15 +5,15 @@
   "main": "server.ts",
   "type": "module",
   "scripts": {
-    "start": "node --loader tsx server.ts",
+    "start": "node dist/server.js",
+    "start:dev": "node --loader tsx server.ts",
     "dev": "tsx watch server.ts",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "type-check": "tsc --noEmit",
-    "clean": "rm -rf dist/ node_modules/.cache/",
-    "vercel-build": "npm run build && rm -rf api && cp -r dist api && mv api/server.js api/index.js"
+    "clean": "rm -rf dist/ node_modules/.cache/"
   },
   "keywords": [
     "ai",
@@ -26,7 +26,7 @@
     "typescript",
     "multi-agent"
   ],
-  "author": "Your Name",
+  "author": "Christian Zanchetta",
   "license": "MIT",
   "dependencies": {
     "@ai-sdk/openai": "^1.0.0",
@@ -70,12 +70,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/fissales-agents.git"
+    "url": "git+https://github.com/fiscet/fissales.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/fissales-agents/issues"
+    "url": "https://github.com/fiscet/fissales/issues"
   },
-  "homepage": "https://github.com/your-username/fissales-agents#readme",
+  "homepage": "https://fiscet.it",
   "directories": {
     "lib": "dist",
     "test": "tests"
