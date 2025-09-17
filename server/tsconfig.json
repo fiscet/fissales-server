@@ -22,8 +22,7 @@
       ]
     },
     "types": [
-      "node",
-      "jest"
+      "node"
     ],
     "lib": [
       "ES2022",
