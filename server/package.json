@@ -7,16 +7,12 @@
   "scripts": {
     "start": "node --loader tsx server.ts",
     "dev": "tsx watch server.ts",
-    "dev:api": "tsx watch server.ts",
     "build": "tsc",
-    "build:api": "tsc",
     "test": "jest",
-    "test:api": "jest .",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist/ node_modules/.cache/",
-    "install:all": "npm install",
     "vercel-build": "npm run build && mkdir -p api && cp dist/server.js api/index.js && cp -r dist/ai dist/config dist/database dist/middleware dist/routes dist/services dist/types dist/utils api/"
   },
   "keywords": [
