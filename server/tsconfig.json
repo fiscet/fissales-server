@@ -19,12 +19,6 @@
     "paths": {
       "@/*": [
         "./*"
-      ],
-      "@/server-api/*": [
-        "./server-api/*"
-      ],
-      "@/server-ai/*": [
-        "./server-ai/*"
       ]
     },
     "types": [
@@ -37,9 +31,7 @@
     ]
   },
   "include": [
-    "server-api/**/*",
-    "server-ai/**/*",
-    "*.ts"
+    "**/*"
   ],
   "exclude": [
     "node_modules",

@@ -8,7 +8,7 @@ class PromptLoaderClass {
   private promptsDir: string;
 
   constructor() {
-    this.promptsDir = path.join(process.cwd(), 'server-ai', 'prompts');
+    this.promptsDir = path.join(process.cwd(), 'ai', 'prompts');
   }
 
   async loadPrompt(promptName: string): Promise<string> {

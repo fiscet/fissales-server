@@ -50,7 +50,7 @@ export default function AccessDeniedClient() {
             onClick={handleLogout}
             className="btn-secondary w-full flex items-center justify-center"
           >
-            <ArrowLeftStartOnRectangleIcon className="w-4 h-4" />
+            <ArrowRightOnRectangleIcon className="w-4 h-4" />
             Logout & Try Different Account
           </button>
 

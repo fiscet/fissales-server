@@ -1,4 +1,4 @@
-// Product types (matching server-api)
+// Product types (matching server)
 export interface Product {
   id: string;
   name: string;
