@@ -13,7 +13,7 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist/ node_modules/.cache/",
-    "vercel-build": "npm run build && mkdir -p api && cp dist/server.js api/index.js && cp -r dist/ai dist/config dist/database dist/middleware dist/routes dist/services dist/types dist/utils api/"
+    "vercel-build": "npm run build && rm -rf api && cp -r dist api && mv api/server.js api/index.js"
   },
   "keywords": [
     "ai",

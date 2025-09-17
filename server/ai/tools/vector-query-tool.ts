@@ -2,7 +2,7 @@ import { openai } from "@ai-sdk/openai";
 import { createVectorQueryTool } from "@mastra/rag";
 
 // Create the vector query tool for product search
-export const productSearchTool = createVectorQueryTool({
+export const productSearchTool: any = createVectorQueryTool({
   id: "product-search",
   description: "Search through the product knowledge base to find relevant winter sports equipment based on customer needs and requirements",
   vectorStoreName: "qdrant", // This should match your vector store configuration
