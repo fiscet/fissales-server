@@ -1,18 +1,19 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import compression from 'compression';
-import rateLimit from 'express-rate-limit';
-import dotenv from 'dotenv';
-import { logger } from './utils/logger';
-import { errorHandler } from './middleware/error-handler';
-import { healthRouter } from './routes/health';
-import { shopifyRouter } from './routes/shopify';
-import { chatRouter } from './routes/chat';
-import { docsRouter } from './routes/docs';
-import { performanceRouter } from './routes/performance';
-import { productsRouter } from './routes/products';
-import { companyRouter } from './routes/company';
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
+const dotenv = require('dotenv');
+import { Request, Response, NextFunction } from 'express';
+const { logger } = require('./utils/logger');
+const { errorHandler } = require('./middleware/error-handler');
+const { healthRouter } = require('./routes/health');
+const { shopifyRouter } = require('./routes/shopify');
+const { chatRouter } = require('./routes/chat');
+const { docsRouter } = require('./routes/docs');
+const { performanceRouter } = require('./routes/performance');
+const { productsRouter } = require('./routes/products');
+const { companyRouter } = require('./routes/company');
 
 // Load environment variables
 dotenv.config();
@@ -45,7 +46,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Request logging
-app.use((req, _res, next) => {
+app.use((req: Request, _res: Response, next: NextFunction) => {
   logger.info(`${req.method} ${req.path}`, {
     ip: req.ip,
     userAgent: req.get('User-Agent'),
@@ -64,7 +65,7 @@ app.use('/api/performance', performanceRouter);
 app.use('/api/products', productsRouter);
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use('*', (req: Request, res: Response) => {
   res.status(404).json({
     error: 'Not Found',
     message: `Route ${req.originalUrl} not found`,
@@ -94,4 +95,4 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-export default app;
+module.exports = app;

@@ -2,34 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "server.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": [
-          "ai/**",
-          "config/**",
-          "database/**",
-          "middleware/**",
-          "routes/**",
-          "services/**",
-          "types/**",
-          "utils/**"
-        ]
-      }
+      "src": "dist/server.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/server.ts"
+      "dest": "/dist/server.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/server.ts"
+      "dest": "/dist/server.js"
     }
   ],
   "functions": {
-    "server.ts": {
+    "dist/server.js": {
       "maxDuration": 30
     }
   },
