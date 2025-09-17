@@ -1,0 +1,6 @@
+# Root workspace .gitignore
+.DS_Store
+.vscode/
+*.log
+materiale/
+# Project-specific ignores are in each subdirectory
