@@ -4,28 +4,26 @@
 
 Il progetto è strutturato per girare in una **singola istanza** che combina:
 
-- **Express API Server** (`server-api/`) - Gestisce le richieste HTTP e l'integrazione Shopify
-- **Mastra AI Agents** (`server-ai/`) - Sistema multi-agente per l'elaborazione AI
+- **Express API Server** (`server/`) - Gestisce le richieste HTTP, gli agenti AI e l'integrazione Shopify
 
 ## Struttura del Progetto
 
 ```
-mastra-sales-agents/
+fissales/
 ├── package.json              # Package.json condiviso (root)
 ├── tsconfig.json             # Configurazione TypeScript condivisa
 ├── env_example               # Variabili d'ambiente
-├── server-api/               # Express API Server
-│   ├── package.json          # Package.json specifico (workspace)
-│   ├── server.ts             # Entry point del server Express
-│   ├── routes/               # Route handlers
-│   ├── middleware/           # Middleware Express
-│   ├── config/               # Configurazioni (Firebase, Shopify)
-│   ├── database/             # Database utilities
-│   └── services/             # Business logic
-└── server-ai/                # Mastra AI Agents
-    ├── package.json          # Package.json specifico (workspace)
-    ├── types.ts              # Tipi TypeScript
-    └── prompts/              # Prompt templates per gli agenti
+├── admin/                    # Dashboard amministrativo Next.js
+└── server/                   # Express API Server & AI Agents
+    ├── server.ts             # Entry point del server Express
+    ├── ai/                   # Agenti AI e logica Mastra
+    │   ├── prompts/          # Prompt templates per gli agenti
+    │   └── types.ts          # Tipi TypeScript AI
+    ├── routes/               # Route handlers
+    ├── middleware/           # Middleware Express
+    ├── config/               # Configurazioni (Firebase, Shopify)
+    ├── database/             # Database utilities
+    └── services/             # Business logic
 ```
 
 ## Vantaggi della Struttura Unificata
@@ -80,7 +78,7 @@ cp env_example .env
 Il server Express importa e utilizza gli agenti Mastra direttamente:
 
 ```typescript
-// server-api/routes/chat.ts
+// server/routes/chat.ts
 import { processWithSupervisor } from '../ai/graph';
 
 // Utilizzo diretto degli agenti

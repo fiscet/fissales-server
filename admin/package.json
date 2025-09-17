@@ -1,5 +1,5 @@
 {
-  "name": "@mastra-sales-agents/admin",
+  "name": "fissales-admin",
   "version": "1.0.0",
   "description": "Admin dashboard for FisSales agents product management",
   "private": true,

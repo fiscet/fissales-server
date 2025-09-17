@@ -1,17 +1,17 @@
 {
-  "name": "mastra-sales-agents",
+  "name": "fissales-server",
   "version": "1.0.0",
   "description": "AI-powered sales agents with Mastra integration and Express API server",
-  "main": "server-api/server.ts",
+  "main": "server.ts",
   "type": "module",
   "scripts": {
-    "start": "node --loader tsx server-api/server.ts",
-    "dev": "tsx watch server-api/server.ts",
-    "dev:api": "tsx watch server-api/server.ts",
+    "start": "node --loader tsx server.ts",
+    "dev": "tsx watch server.ts",
+    "dev:api": "tsx watch server.ts",
     "build": "tsc",
-    "build:api": "tsc --project server-api/tsconfig.json",
+    "build:api": "tsc",
     "test": "jest",
-    "test:api": "jest server-api/",
+    "test:api": "jest .",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "type-check": "tsc --noEmit",
@@ -74,12 +74,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/mastra-sales-agents.git"
+    "url": "git+https://github.com/your-username/fissales-agents.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/mastra-sales-agents/issues"
+    "url": "https://github.com/your-username/fissales-agents/issues"
   },
-  "homepage": "https://github.com/your-username/mastra-sales-agents#readme",
+  "homepage": "https://github.com/your-username/fissales-agents#readme",
   "directories": {
     "lib": "dist",
     "test": "tests"
