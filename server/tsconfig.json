@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "allowJs": true,
@@ -36,6 +36,7 @@
   "exclude": [
     "node_modules",
     "dist",
+    "api",
     "**/*.test.ts",
     "**/*.spec.ts"
   ],
