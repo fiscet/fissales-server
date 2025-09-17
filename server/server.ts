@@ -1,19 +1,18 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const compression = require('compression');
-const rateLimit = require('express-rate-limit');
-const dotenv = require('dotenv');
-import { Request, Response, NextFunction } from 'express';
-const { logger } = require('./utils/logger');
-const { errorHandler } = require('./middleware/error-handler');
-const { healthRouter } = require('./routes/health');
-const { shopifyRouter } = require('./routes/shopify');
-const { chatRouter } = require('./routes/chat');
-const { docsRouter } = require('./routes/docs');
-const { performanceRouter } = require('./routes/performance');
-const { productsRouter } = require('./routes/products');
-const { companyRouter } = require('./routes/company');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
+import dotenv from 'dotenv';
+import { logger } from './utils/logger';
+import { errorHandler } from './middleware/error-handler';
+import { healthRouter } from './routes/health';
+import { shopifyRouter } from './routes/shopify';
+import { chatRouter } from './routes/chat';
+import { docsRouter } from './routes/docs';
+import { performanceRouter } from './routes/performance';
+import { productsRouter } from './routes/products';
+import { companyRouter } from './routes/company';
 
 // Load environment variables
 dotenv.config();
@@ -46,7 +45,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Request logging
-app.use((req: Request, _res: Response, next: NextFunction) => {
+app.use((req, _res, next) => {
   logger.info(`${req.method} ${req.path}`, {
     ip: req.ip,
     userAgent: req.get('User-Agent'),
@@ -65,7 +64,7 @@ app.use('/api/performance', performanceRouter);
 app.use('/api/products', productsRouter);
 
 // 404 handler
-app.use('*', (req: Request, res: Response) => {
+app.use('*', (req, res) => {
   res.status(404).json({
     error: 'Not Found',
     message: `Route ${req.originalUrl} not found`,
@@ -77,22 +76,24 @@ app.use('*', (req: Request, res: Response) => {
 // Error handling middleware
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  logger.info(`🚀 FisAiSalesServer running on port ${PORT}`);
-  logger.info(`Environment: ${process.env['NODE_ENV'] || 'development'}`);
-  logger.info(`Health check: http://localhost:${PORT}/api/health`);
-});
+// Start server only in local development
+if (process.env['NODE_ENV'] !== 'production') {
+  app.listen(PORT, () => {
+    logger.info(`🚀 FisAiSalesServer running on port ${PORT}`);
+    logger.info(`Environment: ${process.env['NODE_ENV'] || 'development'}`);
+    logger.info(`Health check: http://localhost:${PORT}/api/health`);
+  });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM received, shutting down gracefully');
-  process.exit(0);
-});
+  // Graceful shutdown
+  process.on('SIGTERM', () => {
+    logger.info('SIGTERM received, shutting down gracefully');
+    process.exit(0);
+  });
 
-process.on('SIGINT', () => {
-  logger.info('SIGINT received, shutting down gracefully');
-  process.exit(0);
-});
+  process.on('SIGINT', () => {
+    logger.info('SIGINT received, shutting down gracefully');
+    process.exit(0);
+  });
+}
 
-module.exports = app;
+export default app;
