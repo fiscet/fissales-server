@@ -54,6 +54,10 @@ export interface AgentContext {
   requestType?: 'company_info' | 'product_info' | 'problem_solving' | 'other';
   products?: Product[];
   companyInfo?: CompanyInfo;
+  // AI-specific context fields
+  userIntent?: string;
+  productQuery?: string;
+  recommendations?: any[];
 }
 
 export interface AgentResponse {
@@ -61,6 +65,8 @@ export interface AgentResponse {
   products?: Product[];
   context?: AgentContext;
   nextAction?: string;
+  // AI-specific response fields
+  shouldEnd?: boolean;
 }
 
 // Request/Response types

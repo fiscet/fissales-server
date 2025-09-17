@@ -7,12 +7,12 @@ import dotenv from 'dotenv';
 import { logger } from './utils/logger';
 import { errorHandler } from './middleware/error-handler';
 import { healthRouter } from './routes/health';
-import { sessionRouter } from './routes/session';
 import { shopifyRouter } from './routes/shopify';
 import { chatRouter } from './routes/chat';
 import { docsRouter } from './routes/docs';
 import { performanceRouter } from './routes/performance';
 import { productsRouter } from './routes/products';
+import { companyRouter } from './routes/company';
 
 // Load environment variables
 dotenv.config();
@@ -56,9 +56,9 @@ app.use((req, _res, next) => {
 
 // Routes
 app.use('/api/health', healthRouter);
-app.use('/api/chat/session', sessionRouter);
 app.use('/api/shopify', shopifyRouter);
-app.use('/api/chat', chatRouter);
+app.use('/api/chat', chatRouter); // Main chat endpoint
+app.use('/api/company', companyRouter); // Company information management
 app.use('/api/docs', docsRouter);
 app.use('/api/performance', performanceRouter);
 app.use('/api/products', productsRouter);

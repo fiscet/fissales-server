@@ -19,7 +19,8 @@ const COLLECTIONS = {
   CHAT_SESSIONS: 'chat_sessions',
   PRODUCTS: 'products',
   COMPANY_INFO: 'company_info',
-  PRODUCT_EMBEDDINGS: 'product_embeddings'
+  PRODUCT_EMBEDDINGS: 'product_embeddings',
+  SYNC_METADATA: 'sync_metadata'
 } as const;
 
 // Chat Session Operations
@@ -186,7 +187,7 @@ export const createCompanyInfo = async (company: CompanyInfo): Promise<void> => 
   }
 };
 
-export const getCompanyInfo = async (companyId: string): Promise<CompanyInfo | null> => {
+export const getCompanyInfo = async (companyId: string = "company"): Promise<CompanyInfo | null> => {
   try {
     const db = getFirestoreInstance();
     const doc = await db.collection(COLLECTIONS.COMPANY_INFO).doc(companyId).get();
@@ -201,6 +202,11 @@ export const getCompanyInfo = async (companyId: string): Promise<CompanyInfo | n
     logger.error('Error getting company info:', error);
     throw error;
   }
+};
+
+// Simplified function for getting the single company info
+export const getSingleCompanyInfo = async (): Promise<CompanyInfo | null> => {
+  return getCompanyInfo("company");
 };
 
 export const updateCompanyInfo = async (companyId: string, updates: Partial<CompanyInfo>): Promise<void> => {
@@ -239,6 +245,62 @@ export const cleanupOldSessions = async (daysOld: number = 30): Promise<void> =>
     logger.info(`Cleaned up ${snapshot.docs.length} old chat sessions`);
   } catch (error) {
     logger.error('Error cleaning up old sessions:', error);
+    throw error;
+  }
+};
+
+// Sync Metadata Operations
+interface SyncMetadata {
+  id: string;
+  lastShopifySync?: Date;
+  lastQdrantSync?: Date;
+  updatedAt: Date;
+}
+
+export const updateSyncMetadata = async (type: 'shopify' | 'qdrant'): Promise<void> => {
+  try {
+    const db = getFirestoreInstance();
+    const docRef = db.collection(COLLECTIONS.SYNC_METADATA).doc('sync_timestamps');
+
+    const updateData: any = {
+      updatedAt: new Date(),
+    };
+
+    if (type === 'shopify') {
+      updateData.lastShopifySync = new Date();
+    } else {
+      updateData.lastQdrantSync = new Date();
+    }
+
+    await docRef.set(updateData, { merge: true });
+    logger.info(`Sync metadata updated: ${type}`);
+  } catch (error) {
+    logger.error('Error updating sync metadata:', error);
+    throw error;
+  }
+};
+
+export const getSyncMetadata = async (): Promise<SyncMetadata | null> => {
+  try {
+    const db = getFirestoreInstance();
+    const doc = await db.collection(COLLECTIONS.SYNC_METADATA).doc('sync_timestamps').get();
+
+    if (!doc.exists) {
+      return {
+        id: 'sync_timestamps',
+        updatedAt: new Date(),
+      };
+    }
+
+    const data = doc.data() as any;
+    return {
+      id: 'sync_timestamps',
+      lastShopifySync: data.lastShopifySync?.toDate(),
+      lastQdrantSync: data.lastQdrantSync?.toDate(),
+      updatedAt: data.updatedAt?.toDate() || new Date(),
+    };
+  } catch (error) {
+    logger.error('Error getting sync metadata:', error);
     throw error;
   }
 };
