@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { logger } from '../utils/logger';
-import { getProduct, updateProduct, getAllProducts } from '../database/utils';
+import { getProduct, updateProduct, getAllProducts, updateSyncMetadata, getSyncMetadata } from '../database/utils';
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
 import { QdrantVector } from '@mastra/qdrant';
@@ -161,6 +161,11 @@ router.post('/sync-to-qdrant', async (req, res) => {
 
     logger.info(`Successfully synced ${products.length} products to Qdrant`);
 
+    // Update sync metadata on successful bulk sync
+    if (products.length > 0) {
+      await updateSyncMetadata('qdrant');
+    }
+
     return res.status(200).json({
       message: 'Products synced to Qdrant successfully',
       synced: products.length,
@@ -299,6 +304,9 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
 
     logger.info(`Successfully synced product ${productId} to Qdrant`);
 
+    // Update sync metadata on successful individual sync
+    await updateSyncMetadata('qdrant');
+
     return res.status(200).json({
       message: 'Product synced to Qdrant successfully',
       productId,
@@ -396,6 +404,27 @@ router.get('/qdrant/stats', async (req, res) => {
       error: 'Stats Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'QDRANT_STATS_ERROR',
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
+
+// Get sync metadata
+router.get('/sync/stats', async (_req, res) => {
+  try {
+    const syncMetadata = await getSyncMetadata();
+
+    return res.status(200).json({
+      lastShopifySync: syncMetadata?.lastShopifySync?.toISOString(),
+      lastQdrantSync: syncMetadata?.lastQdrantSync?.toISOString(),
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    logger.error('Failed to get sync metadata:', error);
+    return res.status(500).json({
+      error: 'Sync Stats Failed',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: 'SYNC_STATS_ERROR',
       timestamp: new Date().toISOString(),
     });
   }

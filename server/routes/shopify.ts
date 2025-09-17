@@ -8,7 +8,7 @@ import {
   getShopInfo,
   testShopifyIntegration,
 } from '../services/shopify';
-import { getAllProducts, getCompanyInfo } from '../database/utils';
+import { getAllProducts, getCompanyInfo, updateSyncMetadata } from '../database/utils';
 
 const router = Router();
 
@@ -18,6 +18,11 @@ router.post('/import-products', async (_req, res) => {
     logger.info('Product import requested');
 
     const result = await importAllProducts();
+
+    // Update sync metadata on successful import
+    if (result.success > 0) {
+      await updateSyncMetadata('shopify');
+    }
 
     res.status(200).json({
       message: 'Product import completed',

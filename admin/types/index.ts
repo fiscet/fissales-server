@@ -10,6 +10,16 @@ export interface Product {
   productUrl: string;
 }
 
+// Company types (matching server)
+export interface CompanyInfo {
+  id: string;
+  name: string;
+  description: string;
+  policies: string[];
+  contactInfo: Record<string, any>;
+  updatedAt: Date;
+}
+
 // Dashboard stats
 export interface DashboardStats {
   firebaseProducts: number;

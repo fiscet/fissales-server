@@ -16,12 +16,6 @@ router.get('/', (req, res) => {
           'GET /api/health': 'Health check endpoint',
           'GET /api/health/detailed': 'Detailed health check with system info',
         },
-        session: {
-          'POST /api/chat/session': 'Create new chat session',
-          'GET /api/chat/session/:sessionId': 'Get session details',
-          'PUT /api/chat/session/:sessionId': 'Update session',
-          'DELETE /api/chat/session/:sessionId': 'Terminate session',
-        },
         chat: {
           'POST /api/chat': 'Send message to AI agents',
           'GET /api/chat/history': 'Get chat history for session',

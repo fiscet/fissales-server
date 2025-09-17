@@ -8,7 +8,8 @@ import {
   ArrowLeftStartOnRectangleIcon,
   HomeIcon,
   CubeIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  BuildingOfficeIcon
 } from '@heroicons/react/24/outline';
 
 interface HeaderProps {
@@ -80,6 +81,13 @@ export default function Header({
               >
                 <MagnifyingGlassIcon className="w-4 h-4" />
                 Search
+              </button>
+              <button
+                onClick={() => router.push('/dashboard/company')}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                <BuildingOfficeIcon className="w-4 h-4" />
+                Company
               </button>
             </nav>
           )}

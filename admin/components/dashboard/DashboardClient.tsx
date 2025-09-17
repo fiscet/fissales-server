@@ -8,15 +8,19 @@ import { auth } from '@/lib/firebase';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { useToast } from '@/components/ui/Toaster';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { DashboardStats, SyncResponse } from '@/types';
+import { DashboardStats } from '@/types';
 import {
   ArrowPathIcon,
   CloudArrowUpIcon,
   CubeIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3000';
+import {
+  getProductStats,
+  importAllProductsFromShopify,
+  syncAllProductsToQdrant
+} from '@/lib/product-import';
+import { testShopifyConnection, getShopInfo } from '@/lib/shopify-utils';
 
 export default function DashboardClient() {
   const { user } = useAuth();
@@ -25,37 +29,25 @@ export default function DashboardClient() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState<string | null>(null);
+  const [shopInfo, setShopInfo] = useState<any>(null);
+  const [connectionStatus, setConnectionStatus] = useState<'idle' | 'testing' | 'connected' | 'failed'>('idle');
 
   useEffect(() => {
     loadStats();
+    loadShopInfo();
   }, []);
 
   const loadStats = async () => {
     try {
       setLoading(true);
 
-      // Get Firebase products count
-      const firebaseResponse = await fetch(`${API_BASE}/api/shopify/products`);
-      const firebaseData = await firebaseResponse.json();
+      const result = await getProductStats();
 
-      // Get Qdrant products count
-      let qdrantCount = 0;
-      try {
-        const qdrantResponse = await fetch(`${API_BASE}/api/products/qdrant/stats`);
-        if (qdrantResponse.ok) {
-          const qdrantData = await qdrantResponse.json();
-          qdrantCount = qdrantData.count || 0;
-        }
-      } catch (qdrantError) {
-        console.warn('Failed to load Qdrant stats:', qdrantError);
+      if (result.success && result.data) {
+        setStats(result.data);
+      } else {
+        throw new Error(result.error || 'Failed to load stats');
       }
-
-      setStats({
-        firebaseProducts: firebaseData.count || 0,
-        qdrantProducts: qdrantCount,
-        lastSyncFirebase: new Date(),
-        lastSyncQdrant: new Date(),
-      });
     } catch (error) {
       console.error('Failed to load stats:', error);
       addToast('Failed to load dashboard stats', 'error');
@@ -68,31 +60,64 @@ export default function DashboardClient() {
     setSyncing(type);
 
     try {
-      let endpoint = '';
+      let result;
       let successMessage = '';
 
       if (type === 'shopify') {
-        endpoint = `${API_BASE}/api/shopify/import-products`;
-        successMessage = 'Products synced from Shopify successfully!';
+        result = await importAllProductsFromShopify();
+        successMessage = `Products synced from Shopify successfully! (${result.data?.success || 0} imported, ${result.data?.errors || 0} errors)`;
       } else {
-        endpoint = `${API_BASE}/api/products/sync-to-qdrant`;
-        successMessage = 'Products synced to Qdrant successfully!';
+        result = await syncAllProductsToQdrant();
+        successMessage = `Products synced to Qdrant successfully! (${result.data?.synced || 0} synced)`;
       }
 
-      const response = await fetch(endpoint, { method: 'POST' });
-      const data: SyncResponse = await response.json();
-
-      if (response.ok) {
+      if (result.success) {
         addToast(successMessage, 'success');
         await loadStats(); // Refresh stats
       } else {
-        throw new Error(data.message || 'Sync failed');
+        throw new Error(result.error || 'Sync failed');
       }
     } catch (error: any) {
       console.error(`${type} sync error:`, error);
       addToast(error.message || `Failed to sync ${type}`, 'error');
     } finally {
       setSyncing(null);
+    }
+  };
+
+  const loadShopInfo = async () => {
+    try {
+      const result = await getShopInfo();
+
+      if (result.success && result.data) {
+        setShopInfo(result.data);
+        setConnectionStatus('connected');
+      } else {
+        setConnectionStatus('failed');
+      }
+    } catch (error) {
+      console.error('Failed to load shop info:', error);
+      setConnectionStatus('failed');
+    }
+  };
+
+  const handleTestConnection = async () => {
+    setConnectionStatus('testing');
+
+    try {
+      const result = await testShopifyConnection();
+
+      if (result.success) {
+        setConnectionStatus('connected');
+        addToast('Shopify connection successful!', 'success');
+        await loadShopInfo(); // Load shop info after successful connection
+      } else {
+        setConnectionStatus('failed');
+        addToast(`Connection failed: ${result.error}`, 'error');
+      }
+    } catch (error: any) {
+      setConnectionStatus('failed');
+      addToast(`Connection test failed: ${error.message}`, 'error');
     }
   };
 
@@ -168,6 +193,54 @@ export default function DashboardClient() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Shopify Connection Status */}
+          <div className="card">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Shopify Connection</h3>
+              <button
+                onClick={handleTestConnection}
+                disabled={connectionStatus === 'testing'}
+                className={`inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${connectionStatus === 'connected'
+                  ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                  : connectionStatus === 'failed'
+                    ? 'bg-red-100 text-red-800 hover:bg-red-200'
+                    : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                {connectionStatus === 'testing' ? (
+                  <ArrowPathIcon className="w-4 h-4 animate-spin" />
+                ) : (
+                  <div className={`w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-500' : 'bg-red-500'
+                    }`} />
+                )}
+                {connectionStatus === 'testing' ? 'Testing...' : 'Test Connection'}
+              </button>
+            </div>
+
+            {shopInfo && connectionStatus === 'connected' && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-gray-700">Store Name:</span>
+                  <p className="text-gray-900">{shopInfo.name}</p>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Domain:</span>
+                  <p className="text-gray-900">{shopInfo.domain}</p>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Email:</span>
+                  <p className="text-gray-900">{shopInfo.email || 'Not provided'}</p>
+                </div>
+              </div>
+            )}
+
+            {connectionStatus === 'failed' && (
+              <p className="text-sm text-red-600">
+                Connection failed. Please check your Shopify configuration.
+              </p>
+            )}
           </div>
 
           {/* Quick Actions */}
