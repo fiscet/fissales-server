@@ -14,7 +14,7 @@ export const frontendAgent = new Agent({
     );
     const companyDescription = String(
       runtimeContext?.get('companyDescription') ||
-        'Winter sports equipment retailer'
+      'Winter sports equipment retailer'
     );
 
     let prompt = await PromptLoader.loadPrompt('frontend-agent');
@@ -37,7 +37,14 @@ export const frontendAgent = new Agent({
         semanticRecall: { topK: 10, messageRange: 5 },
         workingMemory: {
           enabled: true,
-          scope: isAuthenticated ? 'resource' : 'thread'
+          scope: isAuthenticated ? 'resource' : 'thread',
+          template: `# User Profile
+                    - **Interests**:
+                    - **Current Goal**:
+                    - **Budget**:
+                    - **Experience Level**: [beginner, intermediate, expert]
+                    - **Other Preferences**:
+                    `
         }
       }
     });
