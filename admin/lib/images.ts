@@ -1,10 +1,10 @@
 export const remoteImagePatterns = [
   {
     protocol: 'https' as const,
-    hostname: '**',
+    hostname: '**'
   },
   {
     protocol: 'http' as const,
-    hostname: 'localhost',
-  },
+    hostname: 'localhost'
+  }
 ];

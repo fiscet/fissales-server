@@ -45,7 +45,8 @@ export default function ProductSearchCard({ result }: ProductSearchCardProps) {
           {result.product?.descriptionExtra && (
             <div className="bg-blue-50 border-l-4 border-blue-400 p-3 mb-3">
               <p className="text-sm text-blue-800">
-                <strong>Additional Info:</strong> {result.product.descriptionExtra}
+                <strong>Additional Info:</strong>{' '}
+                {result.product.descriptionExtra}
               </p>
             </div>
           )}
@@ -54,12 +55,8 @@ export default function ProductSearchCard({ result }: ProductSearchCardProps) {
             <span className="font-medium text-green-600">
               ${result.product?.price || 0}
             </span>
-            <span>
-              Stock: {result.product?.stock || 0}
-            </span>
-            <span>
-              ID: {result.product?.id || result.productId}
-            </span>
+            <span>Stock: {result.product?.stock || 0}</span>
+            <span>ID: {result.product?.id || result.productId}</span>
           </div>
         </div>
 
@@ -78,7 +75,9 @@ export default function ProductSearchCard({ result }: ProductSearchCardProps) {
 
       <div className="flex gap-3">
         <button
-          onClick={() => router.push(`/dashboard/products/${result.product?.id}`)}
+          onClick={() =>
+            router.push(`/dashboard/products/${result.product?.id}`)
+          }
           className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
         >
           Edit Product

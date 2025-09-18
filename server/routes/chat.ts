@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
         error: 'Invalid Message',
         message: 'Message is required and must be a string',
         code: 'INVALID_MESSAGE',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
@@ -22,14 +22,14 @@ router.post('/', async (req, res) => {
         error: 'Session ID Required',
         message: 'Session ID is required',
         code: 'SESSION_ID_REQUIRED',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
     logger.info('Chat request received', {
       sessionId,
       userId: userId || 'anonymous',
-      messageLength: message.length,
+      messageLength: message.length
     });
 
     // Simple response for now - you can integrate Mastra here later
@@ -40,14 +40,14 @@ router.post('/', async (req, res) => {
     logger.info('Chat response generated', {
       sessionId,
       userId: userId || 'anonymous',
-      responseLength: response.length,
+      responseLength: response.length
     });
 
     return res.status(200).json({
       response,
       sessionId,
       userId: userId || null,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Chat endpoint error:', error);
@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
       error: 'Chat Processing Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'CHAT_PROCESSING_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });

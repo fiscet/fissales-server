@@ -8,7 +8,7 @@ const getServerUrl = () => {
 // Import all products from Shopify via server API
 export const importAllProductsFromShopify = async (): Promise<{
   success: boolean;
-  data?: { success: number; errors: number; };
+  data?: { success: number; errors: number };
   error?: string;
 }> => {
   try {
@@ -16,13 +16,17 @@ export const importAllProductsFromShopify = async (): Promise<{
     const response = await fetch(`${serverUrl}/api/shopify/import-products`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result: SyncResponse = await response.json();
@@ -31,14 +35,14 @@ export const importAllProductsFromShopify = async (): Promise<{
       success: true,
       data: {
         success: result.success || 0,
-        errors: result.errors || 0,
-      },
+        errors: result.errors || 0
+      }
     };
   } catch (error) {
     console.error('Error importing products from Shopify:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
@@ -54,57 +58,70 @@ export const getAllProducts = async (): Promise<{
     const response = await fetch(`${serverUrl}/api/shopify/products`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
 
     return {
       success: true,
-      data: result.products || [],
+      data: result.products || []
     };
   } catch (error) {
     console.error('Error getting products:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
 
 // Sync single product to Qdrant via server API
-export const syncProductToQdrant = async (productId: string): Promise<{
+export const syncProductToQdrant = async (
+  productId: string
+): Promise<{
   success: boolean;
   error?: string;
 }> => {
   try {
     const serverUrl = getServerUrl();
-    const response = await fetch(`${serverUrl}/api/products/${productId}/sync-to-qdrant`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${serverUrl}/api/products/${productId}/sync-to-qdrant`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     return {
-      success: true,
+      success: true
     };
   } catch (error) {
     console.error('Error syncing product to Qdrant:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
@@ -112,7 +129,7 @@ export const syncProductToQdrant = async (productId: string): Promise<{
 // Sync all products to Qdrant via server API
 export const syncAllProductsToQdrant = async (): Promise<{
   success: boolean;
-  data?: { synced: number; };
+  data?: { synced: number };
   error?: string;
 }> => {
   try {
@@ -120,13 +137,17 @@ export const syncAllProductsToQdrant = async (): Promise<{
     const response = await fetch(`${serverUrl}/api/products/sync-to-qdrant`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result: SyncResponse = await response.json();
@@ -134,14 +155,14 @@ export const syncAllProductsToQdrant = async (): Promise<{
     return {
       success: true,
       data: {
-        synced: result.synced || 0,
-      },
+        synced: result.synced || 0
+      }
     };
   } catch (error) {
     console.error('Error syncing products to Qdrant:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
@@ -156,27 +177,34 @@ export const updateProductDescriptionExtra = async (
 }> => {
   try {
     const serverUrl = getServerUrl();
-    const response = await fetch(`${serverUrl}/api/products/${productId}/description-extra`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ descriptionExtra }),
-    });
+    const response = await fetch(
+      `${serverUrl}/api/products/${productId}/description-extra`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ descriptionExtra })
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     return {
-      success: true,
+      success: true
     };
   } catch (error) {
     console.error('Error updating product description:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
@@ -184,7 +212,7 @@ export const updateProductDescriptionExtra = async (
 // Get Qdrant stats via server API
 export const getQdrantStats = async (): Promise<{
   success: boolean;
-  data?: { count: number; lastSync?: Date; };
+  data?: { count: number; lastSync?: Date };
   error?: string;
 }> => {
   try {
@@ -192,13 +220,17 @@ export const getQdrantStats = async (): Promise<{
     const response = await fetch(`${serverUrl}/api/products/qdrant/stats`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
@@ -207,22 +239,24 @@ export const getQdrantStats = async (): Promise<{
       success: true,
       data: {
         count: result.count || 0,
-        lastSync: result.lastSync ? new Date(result.lastSync) : undefined,
-      },
+        lastSync: result.lastSync ? new Date(result.lastSync) : undefined
+      }
     };
   } catch (error) {
     console.error('Error getting Qdrant stats:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
 
 // Search products via server API
-export const searchProducts = async (query: string): Promise<{
+export const searchProducts = async (
+  query: string
+): Promise<{
   success: boolean;
-  data?: { query: string; results: any[]; count: number; };
+  data?: { query: string; results: any[]; count: number };
   error?: string;
 }> => {
   try {
@@ -230,14 +264,18 @@ export const searchProducts = async (query: string): Promise<{
     const response = await fetch(`${serverUrl}/api/products/search`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query })
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
@@ -247,14 +285,14 @@ export const searchProducts = async (query: string): Promise<{
       data: {
         query: result.query || query,
         results: result.results || [],
-        count: result.count || 0,
-      },
+        count: result.count || 0
+      }
     };
   } catch (error) {
     console.error('Error searching products:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
@@ -264,17 +302,18 @@ export const formatProduct = (product: Product) => {
   return {
     id: product.id,
     name: product.name,
-    description: product.description.length > 100
-      ? product.description.substring(0, 100) + '...'
-      : product.description,
+    description:
+      product.description.length > 100
+        ? product.description.substring(0, 100) + '...'
+        : product.description,
     descriptionExtra: product.descriptionExtra || 'No extra description',
     price: new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'USD'
     }).format(product.price),
     stock: product.stock,
     imageUrl: product.imageUrl,
-    productUrl: product.productUrl,
+    productUrl: product.productUrl
   };
 };
 
@@ -292,13 +331,17 @@ export const getSyncStats = async (): Promise<{
     const response = await fetch(`${serverUrl}/api/products/sync/stats`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
@@ -306,15 +349,19 @@ export const getSyncStats = async (): Promise<{
     return {
       success: true,
       data: {
-        lastSyncFirebase: result.lastShopifySync ? new Date(result.lastShopifySync) : undefined,
-        lastSyncQdrant: result.lastQdrantSync ? new Date(result.lastQdrantSync) : undefined,
-      },
+        lastSyncFirebase: result.lastShopifySync
+          ? new Date(result.lastShopifySync)
+          : undefined,
+        lastSyncQdrant: result.lastQdrantSync
+          ? new Date(result.lastQdrantSync)
+          : undefined
+      }
     };
   } catch (error) {
     console.error('Error getting sync stats:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
@@ -353,15 +400,14 @@ export const getProductStats = async (): Promise<{
         firebaseProducts: productsResult.data?.length || 0,
         qdrantProducts: qdrantResult.data?.count || 0,
         lastSyncFirebase: syncData?.lastSyncFirebase,
-        lastSyncQdrant: syncData?.lastSyncQdrant,
-      },
+        lastSyncQdrant: syncData?.lastSyncQdrant
+      }
     };
   } catch (error) {
     console.error('Error getting product stats:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
-

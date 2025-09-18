@@ -7,12 +7,15 @@ export default function SearchHelp({ show }: SearchHelpProps) {
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">How to Use Search</h2>
+      <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        How to Use Search
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <h3 className="font-medium text-gray-900 mb-2">Semantic Search</h3>
           <p className="text-sm text-gray-600 mb-3">
-            Search uses AI to understand meaning, not just keywords. You can search for:
+            Search uses AI to understand meaning, not just keywords. You can
+            search for:
           </p>
           <ul className="text-sm text-gray-600 space-y-1">
             <li>• Product categories: "winter sports equipment"</li>

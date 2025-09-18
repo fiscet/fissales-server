@@ -3,11 +3,11 @@ import Header from '@/components/ui/Header';
 
 export const metadata: Metadata = {
   title: 'Dashboard - FisSales Admin',
-  description: 'Admin dashboard for managing products and AI sales agents',
+  description: 'Admin dashboard for managing products and AI sales agents'
 };
 
 export default function DashboardLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

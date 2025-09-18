@@ -4,10 +4,6 @@ Company Information:
 - Name: {companyName}
 - Description: {companyDescription}
 
-User's message: {userMessage}
-Previous conversation context: {conversationHistory}
-Current conversation stage: {conversationStage}
-
 MULTI-AGENT SALES FLOW ORCHESTRATION:
 
 **Stage 1: Initial Engagement & Needs Discovery**

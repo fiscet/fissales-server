@@ -25,7 +25,11 @@ interface SearchResultsProps {
   searching: boolean;
 }
 
-export default function SearchResults({ lastQuery, searchResults, searching }: SearchResultsProps) {
+export default function SearchResults({
+  lastQuery,
+  searchResults,
+  searching
+}: SearchResultsProps) {
   if (!lastQuery) return null;
 
   return (
@@ -54,7 +58,8 @@ export default function SearchResults({ lastQuery, searchResults, searching }: S
           <MagnifyingGlassIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <p className="text-gray-500">No products found for "{lastQuery}"</p>
           <p className="text-sm text-gray-400 mt-2">
-            Try a different search term or make sure products are synced to Qdrant
+            Try a different search term or make sure products are synced to
+            Qdrant
           </p>
         </div>
       )}

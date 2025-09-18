@@ -24,12 +24,14 @@ const PORT = process.env['PORT'] || 8080;
 
 // Security middleware
 app.use(helmet());
-app.use(cors({
-  origin: 'https://fissales-admin.vercel.app',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: 'https://fissales-admin.vercel.app',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  })
+);
 
 // Rate limiting
 const limiter = rateLimit({
@@ -37,7 +39,7 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: false
 });
 app.use(limiter);
 

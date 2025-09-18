@@ -6,9 +6,13 @@ import {
   updateProductFromShopify,
   getShopifyProducts,
   getShopInfo,
-  testShopifyIntegration,
+  testShopifyIntegration
 } from '../services/shopify';
-import { getAllProducts, getCompanyInfo, updateSyncMetadata } from '../database/utils';
+import {
+  getAllProducts,
+  getCompanyInfo,
+  updateSyncMetadata
+} from '../database/utils';
 
 const router = Router();
 
@@ -28,7 +32,7 @@ router.post('/import-products', async (_req, res) => {
       message: 'Product import completed',
       success: result.success,
       errors: result.errors,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Product import failed:', error);
@@ -36,7 +40,7 @@ router.post('/import-products', async (_req, res) => {
       error: 'Product Import Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'PRODUCT_IMPORT_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -51,7 +55,7 @@ router.post('/import-company', async (_req, res) => {
     res.status(200).json({
       message: 'Company information imported successfully',
       company: companyInfo,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Company information import failed:', error);
@@ -59,7 +63,7 @@ router.post('/import-company', async (_req, res) => {
       error: 'Company Import Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'COMPANY_IMPORT_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -74,7 +78,7 @@ router.put('/update-product/:productId', async (req, res) => {
         error: 'Product ID Required',
         message: 'Product ID is required',
         code: 'PRODUCT_ID_REQUIRED',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
@@ -87,14 +91,14 @@ router.put('/update-product/:productId', async (req, res) => {
         error: 'Product Not Found',
         message: `Product ${productId} not found in Shopify`,
         code: 'PRODUCT_NOT_FOUND',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
     return res.status(200).json({
       message: 'Product updated successfully',
       product,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Product update failed:', error);
@@ -102,7 +106,7 @@ router.put('/update-product/:productId', async (req, res) => {
       error: 'Product Update Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'PRODUCT_UPDATE_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -115,7 +119,7 @@ router.get('/products', async (_req, res) => {
     res.status(200).json({
       products,
       count: products.length,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Failed to get products:', error);
@@ -123,7 +127,7 @@ router.get('/products', async (_req, res) => {
       error: 'Product Retrieval Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'PRODUCT_RETRIEVAL_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -138,7 +142,7 @@ router.get('/shopify-products', async (req, res) => {
       products,
       count: products.length,
       limit,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Failed to get Shopify products:', error);
@@ -146,7 +150,7 @@ router.get('/shopify-products', async (req, res) => {
       error: 'Shopify Product Retrieval Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'SHOPIFY_PRODUCT_RETRIEVAL_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -161,13 +165,13 @@ router.get('/company', async (_req, res) => {
         error: 'Company Information Not Found',
         message: 'Company information not found in database',
         code: 'COMPANY_NOT_FOUND',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
     return res.status(200).json({
       company: companyInfo,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Failed to get company information:', error);
@@ -175,7 +179,7 @@ router.get('/company', async (_req, res) => {
       error: 'Company Retrieval Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'COMPANY_RETRIEVAL_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -187,7 +191,7 @@ router.get('/shop', async (_req, res) => {
 
     res.status(200).json({
       shop: shopInfo,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Failed to get shop information:', error);
@@ -195,7 +199,7 @@ router.get('/shop', async (_req, res) => {
       error: 'Shop Information Retrieval Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'SHOP_INFO_RETRIEVAL_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -207,8 +211,10 @@ router.get('/test', async (_req, res) => {
 
     res.status(200).json({
       connected: isConnected,
-      message: isConnected ? 'Shopify connection successful' : 'Shopify connection failed',
-      timestamp: new Date().toISOString(),
+      message: isConnected
+        ? 'Shopify connection successful'
+        : 'Shopify connection failed',
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Shopify connection test failed:', error);
@@ -217,7 +223,7 @@ router.get('/test', async (_req, res) => {
       error: 'Connection Test Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'SHOPIFY_CONNECTION_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });

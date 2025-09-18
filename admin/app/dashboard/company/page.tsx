@@ -3,7 +3,7 @@ import CompanyImportClient from '@/components/company/CompanyImportClient';
 
 export const metadata: Metadata = {
   title: 'Company Import - FisSales Admin',
-  description: 'Import company information from Shopify to Firestore',
+  description: 'Import company information from Shopify to Firestore'
 };
 
 export default function CompanyImportPage() {

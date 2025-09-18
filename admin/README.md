@@ -44,6 +44,7 @@ NEXT_PUBLIC_API_BASE=http://localhost:3000
 ## 🏗️ Architecture
 
 Built with:
+
 - **Next.js 15** - React framework
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling

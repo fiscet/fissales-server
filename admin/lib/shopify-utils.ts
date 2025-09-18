@@ -13,26 +13,30 @@ export const testShopifyConnection = async (): Promise<{
     const response = await fetch(`${serverUrl}/api/shopify/test`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
 
     return {
       success: result.connected === true,
-      error: result.connected === false ? result.message : undefined,
+      error: result.connected === false ? result.message : undefined
     };
   } catch (error) {
     console.error('Error testing Shopify connection:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
@@ -48,26 +52,30 @@ export const getShopInfo = async (): Promise<{
     const response = await fetch(`${serverUrl}/api/shopify/shop`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
 
     return {
       success: true,
-      data: result.shop,
+      data: result.shop
     };
   } catch (error) {
     console.error('Error getting shop info:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };

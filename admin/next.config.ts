@@ -8,9 +8,9 @@ const __dirname = path.dirname(__filename);
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: remoteImagePatterns,
+    remotePatterns: remoteImagePatterns
   },
-  outputFileTracingRoot: path.join(__dirname, '../'),
+  outputFileTracingRoot: path.join(__dirname, '../')
 };
 
 export default nextConfig;

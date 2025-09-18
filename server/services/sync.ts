@@ -15,7 +15,7 @@ let syncStatus: SyncStatus = {
   lastCompanySync: null,
   productCount: 0,
   errors: [],
-  isRunning: false,
+  isRunning: false
 };
 
 // Synchronize all data from Shopify
@@ -36,7 +36,8 @@ export const syncAllData = async (): Promise<SyncStatus> => {
       syncStatus.lastCompanySync = new Date();
       logger.info('Company information synchronized successfully');
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       syncStatus.errors.push(`Company sync failed: ${errorMessage}`);
       logger.error('Company information sync failed:', error);
     }
@@ -48,12 +49,17 @@ export const syncAllData = async (): Promise<SyncStatus> => {
       syncStatus.productCount = result.success;
 
       if (result.errors > 0) {
-        syncStatus.errors.push(`Product sync: ${result.errors} errors occurred`);
+        syncStatus.errors.push(
+          `Product sync: ${result.errors} errors occurred`
+        );
       }
 
-      logger.info(`Product synchronization completed: ${result.success} products, ${result.errors} errors`);
+      logger.info(
+        `Product synchronization completed: ${result.success} products, ${result.errors} errors`
+      );
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       syncStatus.errors.push(`Product sync failed: ${errorMessage}`);
       logger.error('Product synchronization failed:', error);
     }
@@ -66,7 +72,10 @@ export const syncAllData = async (): Promise<SyncStatus> => {
 };
 
 // Synchronize only products
-export const syncProducts = async (): Promise<{ success: number; errors: number; }> => {
+export const syncProducts = async (): Promise<{
+  success: number;
+  errors: number;
+}> => {
   try {
     logger.info('Starting product synchronization...');
 
@@ -74,7 +83,9 @@ export const syncProducts = async (): Promise<{ success: number; errors: number;
     syncStatus.lastProductSync = new Date();
     syncStatus.productCount = result.success;
 
-    logger.info(`Product synchronization completed: ${result.success} products, ${result.errors} errors`);
+    logger.info(
+      `Product synchronization completed: ${result.success} products, ${result.errors} errors`
+    );
     return result;
   } catch (error) {
     logger.error('Product synchronization failed:', error);
@@ -109,22 +120,27 @@ export const resetSyncStatus = (): void => {
     lastCompanySync: null,
     productCount: 0,
     errors: [],
-    isRunning: false,
+    isRunning: false
   };
   logger.info('Synchronization status reset');
 };
 
 // Schedule periodic synchronization (for future use)
-export const schedulePeriodicSync = (intervalMinutes: number = 60): NodeJS.Timeout => {
+export const schedulePeriodicSync = (
+  intervalMinutes: number = 60
+): NodeJS.Timeout => {
   logger.info(`Scheduling periodic sync every ${intervalMinutes} minutes`);
 
-  return setInterval(async () => {
-    try {
-      await syncAllData();
-    } catch (error) {
-      logger.error('Periodic synchronization failed:', error);
-    }
-  }, intervalMinutes * 60 * 1000);
+  return setInterval(
+    async () => {
+      try {
+        await syncAllData();
+      } catch (error) {
+        logger.error('Periodic synchronization failed:', error);
+      }
+    },
+    intervalMinutes * 60 * 1000
+  );
 };
 
 // Stop periodic synchronization

@@ -87,7 +87,10 @@ export default function ForgotPasswordForm() {
 
         <form className="mt-8 space-y-6" onSubmit={handleResetPassword}>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email address
             </label>
             <input
@@ -109,9 +112,7 @@ export default function ForgotPasswordForm() {
               disabled={loading}
               className="group relative w-full flex justify-center btn-primary"
             >
-              {loading ? (
-                <LoadingSpinner size="sm" />
-              ) : null}
+              {loading ? <LoadingSpinner size="sm" /> : null}
               {loading ? 'Sending...' : 'Send reset email'}
             </button>
           </div>

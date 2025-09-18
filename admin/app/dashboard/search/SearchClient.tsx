@@ -6,7 +6,7 @@ import { useToast } from '../../../components/ui/Toaster';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 import {
   MagnifyingGlassIcon,
-  ArrowPathIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3000';
@@ -55,12 +55,12 @@ export default function SearchClient() {
       const response = await fetch(`${API_BASE}/api/products/search`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           query: searchQuery,
-          limit: 20,
-        }),
+          limit: 20
+        })
       });
 
       const data: SearchResponse = await response.json();
@@ -91,7 +91,9 @@ export default function SearchClient() {
     <div className="space-y-6">
       {/* Search Interface */}
       <div className="card mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Search Products</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Search Products
+        </h2>
 
         <div className="flex gap-4 mb-6">
           <input
@@ -126,7 +128,9 @@ export default function SearchClient() {
 
         {/* Search Examples */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h3 className="text-sm font-medium text-blue-900 mb-2">Search Examples:</h3>
+          <h3 className="text-sm font-medium text-blue-900 mb-2">
+            Search Examples:
+          </h3>
           <div className="flex flex-wrap gap-2">
             {[
               'winter sports gear',
@@ -167,7 +171,10 @@ export default function SearchClient() {
           ) : searchResults.length > 0 ? (
             <div className="space-y-4">
               {searchResults.map((result, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                <div
+                  key={index}
+                  className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                >
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
@@ -180,13 +187,15 @@ export default function SearchClient() {
                       </div>
 
                       <p className="text-gray-600 mb-3">
-                        {result.product?.description || 'No description available'}
+                        {result.product?.description ||
+                          'No description available'}
                       </p>
 
                       {result.product?.descriptionExtra && (
                         <div className="bg-blue-50 border-l-4 border-blue-400 p-3 mb-3">
                           <p className="text-sm text-blue-800">
-                            <strong>Additional Info:</strong> {result.product.descriptionExtra}
+                            <strong>Additional Info:</strong>{' '}
+                            {result.product.descriptionExtra}
                           </p>
                         </div>
                       )}
@@ -195,9 +204,7 @@ export default function SearchClient() {
                         <span className="font-medium text-green-600">
                           ${result.product?.price || 0}
                         </span>
-                        <span>
-                          Stock: {result.product?.stock || 0}
-                        </span>
+                        <span>Stock: {result.product?.stock || 0}</span>
                         <span>
                           ID: {result.product?.id || result.productId}
                         </span>
@@ -217,7 +224,9 @@ export default function SearchClient() {
 
                   <div className="flex gap-3">
                     <button
-                      onClick={() => router.push(`/dashboard/products/${result.product?.id}`)}
+                      onClick={() =>
+                        router.push(`/dashboard/products/${result.product?.id}`)
+                      }
                       className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
                     >
                       Edit Product
@@ -239,9 +248,12 @@ export default function SearchClient() {
           ) : (
             <div className="text-center py-12">
               <MagnifyingGlassIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500">No products found for "{lastQuery}"</p>
+              <p className="text-gray-500">
+                No products found for "{lastQuery}"
+              </p>
               <p className="text-sm text-gray-400 mt-2">
-                Try a different search term or make sure products are synced to Qdrant
+                Try a different search term or make sure products are synced to
+                Qdrant
               </p>
             </div>
           )}
@@ -251,12 +263,17 @@ export default function SearchClient() {
       {/* Help Section */}
       {!lastQuery && (
         <div className="card">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">How to Use Search</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            How to Use Search
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="font-medium text-gray-900 mb-2">Semantic Search</h3>
+              <h3 className="font-medium text-gray-900 mb-2">
+                Semantic Search
+              </h3>
               <p className="text-sm text-gray-600 mb-3">
-                Search uses AI to understand meaning, not just keywords. You can search for:
+                Search uses AI to understand meaning, not just keywords. You can
+                search for:
               </p>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• Product categories: "winter sports equipment"</li>

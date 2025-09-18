@@ -1,16 +1,26 @@
-import { openai } from "@ai-sdk/openai";
-import { Agent } from "@mastra/core/agent";
-import { PromptLoader } from "../utils/prompt-loader";
+import { openai } from '@ai-sdk/openai';
+import { Agent } from '@mastra/core/agent';
+import { PromptLoader } from '../utils/prompt-loader';
 
 export const frontendAgent = new Agent({
-  name: "frontend-agent",
-  description: "Frontend orchestrator agent that routes customers through the pre-sales → sales agent pipeline",
+  name: 'frontend-agent',
+  description:
+    'Frontend orchestrator agent that routes customers through the pre-sales → sales agent pipeline',
   instructions: async ({ runtimeContext }) => {
-    const companyName = String(runtimeContext?.get("companyName") || "FisSales");
-    const companyDescription = String(runtimeContext?.get("companyDescription") || "Winter sports equipment retailer");
-    const conversationHistory = String(runtimeContext?.get("conversationHistory") || "");
-    const conversationStage = String(runtimeContext?.get("conversationStage") || "initial");
-    const userMessage = String(runtimeContext?.get("userMessage") || "");
+    const companyName = String(
+      runtimeContext?.get('companyName') || 'FisSales'
+    );
+    const companyDescription = String(
+      runtimeContext?.get('companyDescription') ||
+        'Winter sports equipment retailer'
+    );
+    const conversationHistory = String(
+      runtimeContext?.get('conversationHistory') || ''
+    );
+    const conversationStage = String(
+      runtimeContext?.get('conversationStage') || 'initial'
+    );
+    const userMessage = String(runtimeContext?.get('userMessage') || '');
 
     let prompt = await PromptLoader.loadPrompt('frontend-agent');
 
@@ -23,5 +33,5 @@ export const frontendAgent = new Agent({
 
     return prompt;
   },
-  model: openai("gpt-4o-mini"),
+  model: openai('gpt-4o-mini')
 });

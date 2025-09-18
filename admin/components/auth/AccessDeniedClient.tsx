@@ -6,7 +6,10 @@ import Link from 'next/link';
 import { auth } from '@/lib/firebase';
 import { useAuth } from './AuthProvider';
 import { useToast } from '@/components/ui/Toaster';
-import { ExclamationTriangleIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import {
+  ExclamationTriangleIcon,
+  ArrowRightOnRectangleIcon
+} from '@heroicons/react/24/outline';
 
 export default function AccessDeniedClient() {
   const { user } = useAuth();

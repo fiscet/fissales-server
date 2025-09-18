@@ -4,7 +4,7 @@ import { logger } from '../utils/logger';
 const getShopifyConfig = () => ({
   shopUrl: process.env['WEBSHOP_URL'],
   accessToken: process.env['API_TOKEN'],
-  apiVersion: process.env['SHOPIFY_API_VERSION'] || '2024-01',
+  apiVersion: process.env['SHOPIFY_API_VERSION'] || '2024-01'
 });
 
 // Validate Shopify configuration
@@ -36,7 +36,9 @@ const validateShopifyConfig = () => {
 
   // Validate shop URL format
   if (!shopifyConfig.shopUrl?.includes('.myshopify.com')) {
-    throw new Error('WEBSHOP_URL must be a valid Shopify store URL (e.g., https://your-store.myshopify.com)');
+    throw new Error(
+      'WEBSHOP_URL must be a valid Shopify store URL (e.g., https://your-store.myshopify.com)'
+    );
   }
 
   logger.info('Shopify configuration validated successfully');
@@ -54,7 +56,7 @@ const getShopifyHeaders = () => {
   const config = validateShopifyConfig();
   return {
     'Content-Type': 'application/json',
-    'X-Shopify-Access-Token': config.accessToken!,
+    'X-Shopify-Access-Token': config.accessToken!
   };
 };
 
@@ -66,17 +68,19 @@ const testShopifyConnection = async (): Promise<boolean> => {
 
     const response = await fetch(`${apiUrl}/shop.json`, {
       method: 'GET',
-      headers,
+      headers
     });
 
     if (!response.ok) {
-      throw new Error(`Shopify API error: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Shopify API error: ${response.status} ${response.statusText}`
+      );
     }
 
-    const shopData = await response.json() as any;
+    const shopData = (await response.json()) as any;
     logger.info('Shopify connection test successful', {
       shopName: shopData.shop?.name,
-      shopDomain: shopData.shop?.domain,
+      shopDomain: shopData.shop?.domain
     });
 
     return true;
@@ -106,7 +110,7 @@ class ShopifyRateLimiter {
     if (this.requestCount >= this.maxRequests) {
       const waitTime = this.windowMs - (now - this.windowStart);
       logger.warn(`Rate limit reached, waiting ${waitTime}ms`);
-      await new Promise(resolve => setTimeout(resolve, waitTime));
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
       this.requestCount = 0;
       this.windowStart = Date.now();
     }
@@ -133,16 +137,18 @@ const makeShopifyRequest = async (
       ...options,
       headers: {
         ...headers,
-        ...options.headers,
-      },
+        ...options.headers
+      }
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Shopify API error: ${response.status} ${response.statusText} - ${errorText}`);
+      throw new Error(
+        `Shopify API error: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
 
-    const data = await response.json() as any;
+    const data = (await response.json()) as any;
     logger.debug(`Shopify API request successful: ${endpoint}`);
     return data;
   } catch (error) {
@@ -157,5 +163,5 @@ export {
   getShopifyHeaders,
   testShopifyConnection,
   makeShopifyRequest,
-  getShopifyConfig,
+  getShopifyConfig
 };

@@ -24,24 +24,27 @@ export const useToast = () => {
   return context;
 };
 
-export function ToasterProvider({ children }: { children: React.ReactNode; }) {
+export function ToasterProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const addToast = useCallback((message: string, type: Toast['type'], duration = 5000) => {
-    const id = Math.random().toString(36).substr(2, 9);
-    const toast: Toast = { id, message, type, duration };
+  const addToast = useCallback(
+    (message: string, type: Toast['type'], duration = 5000) => {
+      const id = Math.random().toString(36).substr(2, 9);
+      const toast: Toast = { id, message, type, duration };
 
-    setToasts(prev => [...prev, toast]);
+      setToasts((prev) => [...prev, toast]);
 
-    if (duration > 0) {
-      setTimeout(() => {
-        setToasts(prev => prev.filter(t => t.id !== id));
-      }, duration);
-    }
-  }, []);
+      if (duration > 0) {
+        setTimeout(() => {
+          setToasts((prev) => prev.filter((t) => t.id !== id));
+        }, duration);
+      }
+    },
+    []
+  );
 
   const removeToast = (id: string) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
+    setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
   const getToastStyles = (type: Toast['type']) => {

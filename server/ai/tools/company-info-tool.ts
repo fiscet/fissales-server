@@ -1,11 +1,12 @@
-import { createTool } from "@mastra/core/tools";
-import { z } from "zod";
-import { getSingleCompanyInfo } from "../../database/utils";
+import { createTool } from '@mastra/core/tools';
+import { z } from 'zod';
+import { getSingleCompanyInfo } from '../../database/utils';
 
 // Tool to fetch company information from the database
 export const companyInfoTool: ReturnType<typeof createTool> = createTool({
-  id: "get-company-info",
-  description: "Retrieves company information including name, description, policies, and contact details from the database",
+  id: 'get-company-info',
+  description:
+    'Retrieves company information including name, description, policies, and contact details from the database',
   inputSchema: z.object({}), // No input needed - only one company
   outputSchema: z.object({
     id: z.string(),
@@ -14,7 +15,7 @@ export const companyInfoTool: ReturnType<typeof createTool> = createTool({
     policies: z.array(z.string()),
     contactInfo: z.record(z.any()),
     updatedAt: z.string(),
-    found: z.boolean(),
+    found: z.boolean()
   }),
   execute: async () => {
     try {
@@ -22,21 +23,21 @@ export const companyInfoTool: ReturnType<typeof createTool> = createTool({
 
       if (!companyInfo) {
         return {
-          id: "company",
-          name: "FisSales",
-          description: "Premium winter sports equipment retailer",
+          id: 'company',
+          name: 'FisSales',
+          description: 'Premium winter sports equipment retailer',
           policies: [
-            "30-day return policy",
-            "Free shipping on orders over $100",
-            "1-year warranty on all equipment"
+            '30-day return policy',
+            'Free shipping on orders over $100',
+            '1-year warranty on all equipment'
           ],
           contactInfo: {
-            email: "support@fissales.com",
-            phone: "+1-800-FISSALES",
-            address: "123 Winter Sports Ave, Snow Valley, CO 80424"
+            email: 'support@fissales.com',
+            phone: '+1-800-FISSALES',
+            address: '123 Winter Sports Ave, Snow Valley, CO 80424'
           },
           updatedAt: new Date().toISOString(),
-          found: false,
+          found: false
         };
       }
 
@@ -47,29 +48,29 @@ export const companyInfoTool: ReturnType<typeof createTool> = createTool({
         policies: companyInfo.policies,
         contactInfo: companyInfo.contactInfo,
         updatedAt: companyInfo.updatedAt.toISOString(),
-        found: true,
+        found: true
       };
     } catch (error) {
-      console.error("Failed to fetch company info:", error);
+      console.error('Failed to fetch company info:', error);
 
       // Return default company info on error
       return {
-        id: "company",
-        name: "FisSales",
-        description: "Premium winter sports equipment retailer",
+        id: 'company',
+        name: 'FisSales',
+        description: 'Premium winter sports equipment retailer',
         policies: [
-          "30-day return policy",
-          "Free shipping on orders over $100",
-          "1-year warranty on all equipment"
+          '30-day return policy',
+          'Free shipping on orders over $100',
+          '1-year warranty on all equipment'
         ],
         contactInfo: {
-          email: "support@fissales.com",
-          phone: "+1-800-FISSALES",
-          address: "123 Winter Sports Ave, Snow Valley, CO 80424"
+          email: 'support@fissales.com',
+          phone: '+1-800-FISSALES',
+          address: '123 Winter Sports Ave, Snow Valley, CO 80424'
         },
         updatedAt: new Date().toISOString(),
-        found: false,
+        found: false
       };
     }
-  },
+  }
 });

@@ -19,7 +19,9 @@ interface ProductEditClientProps {
   productId: string;
 }
 
-export default function ProductEditClient({ productId }: ProductEditClientProps) {
+export default function ProductEditClient({
+  productId
+}: ProductEditClientProps) {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -43,7 +45,9 @@ export default function ProductEditClient({ productId }: ProductEditClientProps)
       const data = await response.json();
 
       if (response.ok) {
-        const foundProduct = data.products.find((p: Product) => p.id === productId);
+        const foundProduct = data.products.find(
+          (p: Product) => p.id === productId
+        );
         if (foundProduct) {
           setProduct(foundProduct);
           setDescriptionExtra(foundProduct.descriptionExtra || '');
@@ -68,13 +72,16 @@ export default function ProductEditClient({ productId }: ProductEditClientProps)
     setSaving(true);
 
     try {
-      const response = await fetch(`${API_BASE}/api/products/${productId}/description-extra`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ descriptionExtra }),
-      });
+      const response = await fetch(
+        `${API_BASE}/api/products/${productId}/description-extra`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ descriptionExtra })
+        }
+      );
 
       const data = await response.json();
 
@@ -101,9 +108,12 @@ export default function ProductEditClient({ productId }: ProductEditClientProps)
     setSyncing(true);
 
     try {
-      const response = await fetch(`${API_BASE}/api/products/${productId}/sync-to-qdrant`, {
-        method: 'POST',
-      });
+      const response = await fetch(
+        `${API_BASE}/api/products/${productId}/sync-to-qdrant`,
+        {
+          method: 'POST'
+        }
+      );
 
       const data = await response.json();
 
@@ -132,7 +142,9 @@ export default function ProductEditClient({ productId }: ProductEditClientProps)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Product Not Found
+          </h2>
           <Link href="/dashboard/products" className="btn-primary">
             Back to Products
           </Link>
@@ -204,7 +216,9 @@ export default function ProductEditClient({ productId }: ProductEditClientProps)
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Product Details */}
           <div className="card">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Product Details</h2>
+            <h2 className="text-lg font-medium text-gray-900 mb-4">
+              Product Details
+            </h2>
 
             {product.imageUrl && (
               <div className="mb-6">
@@ -218,27 +232,43 @@ export default function ProductEditClient({ productId }: ProductEditClientProps)
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Product ID</label>
-                <p className="mt-1 text-sm text-gray-900 font-mono">{product.id}</p>
+                <label className="block text-sm font-medium text-gray-700">
+                  Product ID
+                </label>
+                <p className="mt-1 text-sm text-gray-900 font-mono">
+                  {product.id}
+                </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Name
+                </label>
                 <p className="mt-1 text-sm text-gray-900">{product.name}</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Price</label>
-                <p className="mt-1 text-lg font-bold text-primary-600">${product.price}</p>
+                <label className="block text-sm font-medium text-gray-700">
+                  Price
+                </label>
+                <p className="mt-1 text-lg font-bold text-primary-600">
+                  ${product.price}
+                </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Stock</label>
-                <p className="mt-1 text-sm text-gray-900">{product.stock} units</p>
+                <label className="block text-sm font-medium text-gray-700">
+                  Stock
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {product.stock} units
+                </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Description</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Description
+                </label>
                 <div
                   className="mt-1 text-sm text-gray-900 prose prose-sm max-w-none"
                   dangerouslySetInnerHTML={{ __html: product.description }}
@@ -249,14 +279,20 @@ export default function ProductEditClient({ productId }: ProductEditClientProps)
 
           {/* Editable Description Extra */}
           <div className="card">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Additional Description</h2>
+            <h2 className="text-lg font-medium text-gray-900 mb-4">
+              Additional Description
+            </h2>
             <p className="text-sm text-gray-600 mb-4">
-              Add extra details, features, or selling points for this product. This will be used for AI-powered search and recommendations.
+              Add extra details, features, or selling points for this product.
+              This will be used for AI-powered search and recommendations.
             </p>
 
             <div className="space-y-4">
               <div>
-                <label htmlFor="descriptionExtra" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="descriptionExtra"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Extra Description
                 </label>
                 <textarea
@@ -293,7 +329,9 @@ export default function ProductEditClient({ productId }: ProductEditClientProps)
 
                 {hasChanges && (
                   <button
-                    onClick={() => setDescriptionExtra(product.descriptionExtra || '')}
+                    onClick={() =>
+                      setDescriptionExtra(product.descriptionExtra || '')
+                    }
                     className="btn-secondary"
                   >
                     Reset

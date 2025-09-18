@@ -16,26 +16,30 @@ export const importCompanyFromShopify = async (): Promise<{
     const response = await fetch(`${serverUrl}/api/company/import`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
 
     return {
       success: true,
-      data: result.company,
+      data: result.company
     };
   } catch (error) {
     console.error('Error importing company info from Shopify:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
@@ -51,32 +55,36 @@ export const getCompanyInfo = async (): Promise<{
     const response = await fetch(`${serverUrl}/api/company`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       if (response.status === 404) {
         return {
           success: true,
-          data: undefined, // No company info found
+          data: undefined // No company info found
         };
       }
       const errorData = await response.json();
-      throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message ||
+          errorData.error ||
+          `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
 
     return {
       success: true,
-      data: result.company,
+      data: result.company
     };
   } catch (error) {
     console.error('Error getting company info:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };
@@ -90,7 +98,9 @@ export const formatCompanyInfo = (company: CompanyInfo) => {
     phone: company.contactInfo?.phone || 'Not provided',
     address: formatAddress(company.contactInfo?.address),
     policies: company.policies?.length || 0,
-    lastUpdated: company.updatedAt ? new Date(company.updatedAt).toLocaleString() : 'Never',
+    lastUpdated: company.updatedAt
+      ? new Date(company.updatedAt).toLocaleString()
+      : 'Never'
   };
 };
 
@@ -104,7 +114,7 @@ const formatAddress = (address: any) => {
     address.city,
     address.province,
     address.country,
-    address.zip,
+    address.zip
   ].filter(Boolean);
 
   return parts.length > 0 ? parts.join(', ') : 'Not provided';

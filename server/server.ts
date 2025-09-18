@@ -22,12 +22,15 @@ const PORT = process.env['PORT'] || 8080;
 
 // Security middleware
 app.use(helmet());
-app.use(cors({
-  origin: process.env['NODE_ENV'] === 'production'
-    ? [process.env['WEBSHOP_URL'] || '']
-    : true,
-  credentials: true
-}));
+app.use(
+  cors({
+    origin:
+      process.env['NODE_ENV'] === 'production'
+        ? [process.env['WEBSHOP_URL'] || '']
+        : true,
+    credentials: true
+  })
+);
 
 // Rate limiting
 const limiter = rateLimit({
@@ -35,7 +38,7 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: false
 });
 app.use(limiter);
 

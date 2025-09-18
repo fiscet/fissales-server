@@ -13,7 +13,7 @@ import {
   ArrowPathIcon,
   CloudArrowUpIcon,
   CubeIcon,
-  MagnifyingGlassIcon,
+  MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 import {
   getProductStats,
@@ -30,7 +30,9 @@ export default function DashboardClient() {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState<string | null>(null);
   const [shopInfo, setShopInfo] = useState<any>(null);
-  const [connectionStatus, setConnectionStatus] = useState<'idle' | 'testing' | 'connected' | 'failed'>('idle');
+  const [connectionStatus, setConnectionStatus] = useState<
+    'idle' | 'testing' | 'connected' | 'failed'
+  >('idle');
 
   useEffect(() => {
     loadStats();
@@ -148,8 +150,12 @@ export default function DashboardClient() {
                   <CubeIcon className="w-8 h-8 text-primary-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Products in Firebase</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats?.firebaseProducts || 0}</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Products in Firebase
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stats?.firebaseProducts || 0}
+                  </p>
                 </div>
               </div>
             </div>
@@ -160,8 +166,12 @@ export default function DashboardClient() {
                   <MagnifyingGlassIcon className="w-8 h-8 text-success-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Products in Qdrant</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats?.qdrantProducts || 0}</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Products in Qdrant
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stats?.qdrantProducts || 0}
+                  </p>
                 </div>
               </div>
             </div>
@@ -172,9 +182,13 @@ export default function DashboardClient() {
                   <CloudArrowUpIcon className="w-8 h-8 text-warning-500" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Last Shopify Sync</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Last Shopify Sync
+                  </p>
                   <p className="text-sm text-gray-900">
-                    {stats?.lastSyncFirebase ? stats.lastSyncFirebase.toLocaleDateString() : 'Never'}
+                    {stats?.lastSyncFirebase
+                      ? stats.lastSyncFirebase.toLocaleDateString()
+                      : 'Never'}
                   </p>
                 </div>
               </div>
@@ -186,9 +200,13 @@ export default function DashboardClient() {
                   <ArrowPathIcon className="w-8 h-8 text-primary-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Last Qdrant Sync</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Last Qdrant Sync
+                  </p>
                   <p className="text-sm text-gray-900">
-                    {stats?.lastSyncQdrant ? stats.lastSyncQdrant.toLocaleDateString() : 'Never'}
+                    {stats?.lastSyncQdrant
+                      ? stats.lastSyncQdrant.toLocaleDateString()
+                      : 'Never'}
                   </p>
                 </div>
               </div>
@@ -198,24 +216,34 @@ export default function DashboardClient() {
           {/* Shopify Connection Status */}
           <div className="card">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900">Shopify Connection</h3>
+              <h3 className="text-lg font-medium text-gray-900">
+                Shopify Connection
+              </h3>
               <button
                 onClick={handleTestConnection}
                 disabled={connectionStatus === 'testing'}
-                className={`inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${connectionStatus === 'connected'
-                  ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                  : connectionStatus === 'failed'
-                    ? 'bg-red-100 text-red-800 hover:bg-red-200'
-                    : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                className={`inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  connectionStatus === 'connected'
+                    ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                    : connectionStatus === 'failed'
+                      ? 'bg-red-100 text-red-800 hover:bg-red-200'
+                      : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {connectionStatus === 'testing' ? (
                   <ArrowPathIcon className="w-4 h-4 animate-spin" />
                 ) : (
-                  <div className={`w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-500' : 'bg-red-500'
-                    }`} />
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      connectionStatus === 'connected'
+                        ? 'bg-green-500'
+                        : 'bg-red-500'
+                    }`}
+                  />
                 )}
-                {connectionStatus === 'testing' ? 'Testing...' : 'Test Connection'}
+                {connectionStatus === 'testing'
+                  ? 'Testing...'
+                  : 'Test Connection'}
               </button>
             </div>
 
@@ -231,7 +259,9 @@ export default function DashboardClient() {
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Email:</span>
-                  <p className="text-gray-900">{shopInfo.email || 'Not provided'}</p>
+                  <p className="text-gray-900">
+                    {shopInfo.email || 'Not provided'}
+                  </p>
                 </div>
               </div>
             )}
@@ -245,7 +275,9 @@ export default function DashboardClient() {
 
           {/* Quick Actions */}
           <div className="card">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              Quick Actions
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <button
                 onClick={() => router.push('/dashboard/products')}
@@ -274,7 +306,9 @@ export default function DashboardClient() {
           {/* Action Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="card">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Shopify Integration</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Shopify Integration
+              </h3>
               <p className="text-sm text-gray-600 mb-4">
                 Import products from Shopify to Firebase database
               </p>
@@ -298,7 +332,9 @@ export default function DashboardClient() {
             </div>
 
             <div className="card">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Vector Search</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Vector Search
+              </h3>
               <p className="text-sm text-gray-600 mb-4">
                 Sync products to Qdrant for AI-powered search
               </p>
@@ -324,7 +360,9 @@ export default function DashboardClient() {
 
           {/* Navigation */}
           <div className="card">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Product Management</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              Product Management
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Link
                 href="/dashboard/products"
@@ -332,7 +370,9 @@ export default function DashboardClient() {
               >
                 <div>
                   <h4 className="font-medium text-gray-900">Products List</h4>
-                  <p className="text-sm text-gray-600">View and manage all products</p>
+                  <p className="text-sm text-gray-600">
+                    View and manage all products
+                  </p>
                 </div>
                 <ArrowPathIcon className="w-5 h-5 text-gray-400" />
               </Link>
@@ -343,7 +383,9 @@ export default function DashboardClient() {
               >
                 <div>
                   <h4 className="font-medium text-gray-900">Product Search</h4>
-                  <p className="text-sm text-gray-600">Test vector search functionality</p>
+                  <p className="text-sm text-gray-600">
+                    Test vector search functionality
+                  </p>
                 </div>
                 <MagnifyingGlassIcon className="w-5 h-5 text-gray-400" />
               </Link>

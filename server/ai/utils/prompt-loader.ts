@@ -38,7 +38,7 @@ class PromptLoaderClass {
     logger.info('Prompt cache cleared');
   }
 
-  getCacheStats(): { size: number; keys: string[]; } {
+  getCacheStats(): { size: number; keys: string[] } {
     return {
       size: this.cache.size,
       keys: Array.from(this.cache.keys())

@@ -54,7 +54,10 @@ export default function LoginForm() {
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email address
               </label>
               <input
@@ -71,7 +74,10 @@ export default function LoginForm() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
@@ -94,9 +100,7 @@ export default function LoginForm() {
               disabled={loading}
               className="group relative w-full flex justify-center btn-primary"
             >
-              {loading ? (
-                <LoadingSpinner size="sm" />
-              ) : null}
+              {loading ? <LoadingSpinner size="sm" /> : null}
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>

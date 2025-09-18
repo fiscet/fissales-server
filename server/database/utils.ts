@@ -24,7 +24,9 @@ const COLLECTIONS = {
 } as const;
 
 // Chat Session Operations
-export const createChatSession = async (sessionId: string): Promise<ChatSession> => {
+export const createChatSession = async (
+  sessionId: string
+): Promise<ChatSession> => {
   try {
     const db = getFirestoreInstance();
     const now = new Date();
@@ -38,7 +40,10 @@ export const createChatSession = async (sessionId: string): Promise<ChatSession>
     };
 
     const firestoreSession = chatSessionToFirestore(session);
-    await db.collection(COLLECTIONS.CHAT_SESSIONS).doc(sessionId).set(firestoreSession);
+    await db
+      .collection(COLLECTIONS.CHAT_SESSIONS)
+      .doc(sessionId)
+      .set(firestoreSession);
 
     logger.info(`Chat session created: ${sessionId}`);
     return session;
@@ -48,10 +53,15 @@ export const createChatSession = async (sessionId: string): Promise<ChatSession>
   }
 };
 
-export const getChatSession = async (sessionId: string): Promise<ChatSession | null> => {
+export const getChatSession = async (
+  sessionId: string
+): Promise<ChatSession | null> => {
   try {
     const db = getFirestoreInstance();
-    const doc = await db.collection(COLLECTIONS.CHAT_SESSIONS).doc(sessionId).get();
+    const doc = await db
+      .collection(COLLECTIONS.CHAT_SESSIONS)
+      .doc(sessionId)
+      .get();
 
     if (!doc.exists) {
       return null;
@@ -65,7 +75,10 @@ export const getChatSession = async (sessionId: string): Promise<ChatSession | n
   }
 };
 
-export const updateChatSession = async (sessionId: string, session: Partial<ChatSession>): Promise<void> => {
+export const updateChatSession = async (
+  sessionId: string,
+  session: Partial<ChatSession>
+): Promise<void> => {
   try {
     const db = getFirestoreInstance();
     const updates = {
@@ -74,7 +87,10 @@ export const updateChatSession = async (sessionId: string, session: Partial<Chat
       lastActive: new Date()
     };
 
-    await db.collection(COLLECTIONS.CHAT_SESSIONS).doc(sessionId).update(updates);
+    await db
+      .collection(COLLECTIONS.CHAT_SESSIONS)
+      .doc(sessionId)
+      .update(updates);
     logger.info(`Chat session updated: ${sessionId}`);
   } catch (error) {
     logger.error('Error updating chat session:', error);
@@ -82,7 +98,10 @@ export const updateChatSession = async (sessionId: string, session: Partial<Chat
   }
 };
 
-export const addMessageToSession = async (sessionId: string, message: any): Promise<void> => {
+export const addMessageToSession = async (
+  sessionId: string,
+  message: any
+): Promise<void> => {
   try {
     const db = getFirestoreInstance();
     const sessionRef = db.collection(COLLECTIONS.CHAT_SESSIONS).doc(sessionId);
@@ -106,7 +125,10 @@ export const createProduct = async (product: Product): Promise<void> => {
     const db = getFirestoreInstance();
     const firestoreProduct = productToFirestore(product);
 
-    await db.collection(COLLECTIONS.PRODUCTS).doc(product.id).set(firestoreProduct);
+    await db
+      .collection(COLLECTIONS.PRODUCTS)
+      .doc(product.id)
+      .set(firestoreProduct);
     logger.info(`Product created: ${product.id}`);
   } catch (error) {
     logger.error('Error creating product:', error);
@@ -114,7 +136,9 @@ export const createProduct = async (product: Product): Promise<void> => {
   }
 };
 
-export const getProduct = async (productId: string): Promise<Product | null> => {
+export const getProduct = async (
+  productId: string
+): Promise<Product | null> => {
   try {
     const db = getFirestoreInstance();
     const doc = await db.collection(COLLECTIONS.PRODUCTS).doc(productId).get();
@@ -136,7 +160,7 @@ export const getAllProducts = async (): Promise<Product[]> => {
     const db = getFirestoreInstance();
     const snapshot = await db.collection(COLLECTIONS.PRODUCTS).get();
 
-    return snapshot.docs.map(doc => {
+    return snapshot.docs.map((doc) => {
       const data = doc.data() as any;
       return firestoreToProduct(data);
     });
@@ -146,7 +170,10 @@ export const getAllProducts = async (): Promise<Product[]> => {
   }
 };
 
-export const updateProduct = async (productId: string, updates: Partial<Product>): Promise<void> => {
+export const updateProduct = async (
+  productId: string,
+  updates: Partial<Product>
+): Promise<void> => {
   try {
     const db = getFirestoreInstance();
     const updateData = {
@@ -174,12 +201,17 @@ export const deleteProduct = async (productId: string): Promise<void> => {
 };
 
 // Company Info Operations
-export const createCompanyInfo = async (company: CompanyInfo): Promise<void> => {
+export const createCompanyInfo = async (
+  company: CompanyInfo
+): Promise<void> => {
   try {
     const db = getFirestoreInstance();
     const firestoreCompany = companyInfoToFirestore(company);
 
-    await db.collection(COLLECTIONS.COMPANY_INFO).doc(company.id).set(firestoreCompany);
+    await db
+      .collection(COLLECTIONS.COMPANY_INFO)
+      .doc(company.id)
+      .set(firestoreCompany);
     logger.info(`Company info created: ${company.id}`);
   } catch (error) {
     logger.error('Error creating company info:', error);
@@ -187,10 +219,15 @@ export const createCompanyInfo = async (company: CompanyInfo): Promise<void> => 
   }
 };
 
-export const getCompanyInfo = async (companyId: string = "company"): Promise<CompanyInfo | null> => {
+export const getCompanyInfo = async (
+  companyId: string = 'company'
+): Promise<CompanyInfo | null> => {
   try {
     const db = getFirestoreInstance();
-    const doc = await db.collection(COLLECTIONS.COMPANY_INFO).doc(companyId).get();
+    const doc = await db
+      .collection(COLLECTIONS.COMPANY_INFO)
+      .doc(companyId)
+      .get();
 
     if (!doc.exists) {
       return null;
@@ -206,10 +243,13 @@ export const getCompanyInfo = async (companyId: string = "company"): Promise<Com
 
 // Simplified function for getting the single company info
 export const getSingleCompanyInfo = async (): Promise<CompanyInfo | null> => {
-  return getCompanyInfo("company");
+  return getCompanyInfo('company');
 };
 
-export const updateCompanyInfo = async (companyId: string, updates: Partial<CompanyInfo>): Promise<void> => {
+export const updateCompanyInfo = async (
+  companyId: string,
+  updates: Partial<CompanyInfo>
+): Promise<void> => {
   try {
     const db = getFirestoreInstance();
     const updateData = {
@@ -217,7 +257,10 @@ export const updateCompanyInfo = async (companyId: string, updates: Partial<Comp
       updatedAt: new Date()
     };
 
-    await db.collection(COLLECTIONS.COMPANY_INFO).doc(companyId).update(updateData);
+    await db
+      .collection(COLLECTIONS.COMPANY_INFO)
+      .doc(companyId)
+      .update(updateData);
     logger.info(`Company info updated: ${companyId}`);
   } catch (error) {
     logger.error('Error updating company info:', error);
@@ -226,18 +269,21 @@ export const updateCompanyInfo = async (companyId: string, updates: Partial<Comp
 };
 
 // Utility Functions
-export const cleanupOldSessions = async (daysOld: number = 30): Promise<void> => {
+export const cleanupOldSessions = async (
+  daysOld: number = 30
+): Promise<void> => {
   try {
     const db = getFirestoreInstance();
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - daysOld);
 
-    const snapshot = await db.collection(COLLECTIONS.CHAT_SESSIONS)
+    const snapshot = await db
+      .collection(COLLECTIONS.CHAT_SESSIONS)
       .where('lastActive', '<', cutoffDate)
       .get();
 
     const batch = db.batch();
-    snapshot.docs.forEach(doc => {
+    snapshot.docs.forEach((doc) => {
       batch.delete(doc.ref);
     });
 
@@ -257,13 +303,17 @@ interface SyncMetadata {
   updatedAt: Date;
 }
 
-export const updateSyncMetadata = async (type: 'shopify' | 'qdrant'): Promise<void> => {
+export const updateSyncMetadata = async (
+  type: 'shopify' | 'qdrant'
+): Promise<void> => {
   try {
     const db = getFirestoreInstance();
-    const docRef = db.collection(COLLECTIONS.SYNC_METADATA).doc('sync_timestamps');
+    const docRef = db
+      .collection(COLLECTIONS.SYNC_METADATA)
+      .doc('sync_timestamps');
 
     const updateData: any = {
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
 
     if (type === 'shopify') {
@@ -283,12 +333,15 @@ export const updateSyncMetadata = async (type: 'shopify' | 'qdrant'): Promise<vo
 export const getSyncMetadata = async (): Promise<SyncMetadata | null> => {
   try {
     const db = getFirestoreInstance();
-    const doc = await db.collection(COLLECTIONS.SYNC_METADATA).doc('sync_timestamps').get();
+    const doc = await db
+      .collection(COLLECTIONS.SYNC_METADATA)
+      .doc('sync_timestamps')
+      .get();
 
     if (!doc.exists) {
       return {
         id: 'sync_timestamps',
-        updatedAt: new Date(),
+        updatedAt: new Date()
       };
     }
 
@@ -297,7 +350,7 @@ export const getSyncMetadata = async (): Promise<SyncMetadata | null> => {
       id: 'sync_timestamps',
       lastShopifySync: data.lastShopifySync?.toDate(),
       lastQdrantSync: data.lastQdrantSync?.toDate(),
-      updatedAt: data.updatedAt?.toDate() || new Date(),
+      updatedAt: data.updatedAt?.toDate() || new Date()
     };
   } catch (error) {
     logger.error('Error getting sync metadata:', error);

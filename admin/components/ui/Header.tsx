@@ -19,7 +19,7 @@ interface HeaderProps {
 }
 
 export default function Header({
-  title = "FisSales Admin",
+  title = 'FisSales Admin',
   subtitle,
   showNavigation = true
 }: HeaderProps) {
@@ -52,9 +52,7 @@ export default function Header({
             />
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-              {subtitle && (
-                <p className="text-sm text-gray-600">{subtitle}</p>
-              )}
+              {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
             </div>
           </div>
 

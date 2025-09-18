@@ -35,7 +35,7 @@ export const createUserRole = async (user: User): Promise<void> => {
       email: user.email || '',
       role: 'pending', // Default to pending approval
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
 
     await setDoc(doc(db, 'user_roles', user.uid), userRole);
@@ -62,7 +62,7 @@ export const getUserRole = async (user: User): Promise<UserRole | null> => {
 
 // Predefined admin emails (first line of defense)
 const ADMIN_EMAILS = [
-  'fiscet@gmail.com',
+  'fiscet@gmail.com'
   // Add your admin emails here
 ];
 

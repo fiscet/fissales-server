@@ -10,7 +10,10 @@ interface AuthGuardProps {
   requireAuth?: boolean;
 }
 
-export default function AuthGuard({ children, requireAuth = true }: AuthGuardProps) {
+export default function AuthGuard({
+  children,
+  requireAuth = true
+}: AuthGuardProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
 

@@ -1,27 +1,45 @@
-import { openai } from "@ai-sdk/openai";
-import { Agent } from "@mastra/core/agent";
-import { PromptLoader } from "../utils/prompt-loader";
+import { openai } from '@ai-sdk/openai';
+import { Agent } from '@mastra/core/agent';
+import { Memory } from '@mastra/memory';
+import { PromptLoader } from '../utils/prompt-loader';
+import { storage } from '../utils/storage';
 
 export const frontendAgent = new Agent({
-  name: "frontend-agent",
-  description: "Frontend orchestrator agent that routes customers through the pre-sales → sales agent pipeline",
+  name: 'frontend-agent',
+  description:
+    'Frontend orchestrator agent that routes customers through the pre-sales → sales agent pipeline or the company agent',
   instructions: async ({ runtimeContext }) => {
-    const companyName = String(runtimeContext?.get("companyName") || "FisSales");
-    const companyDescription = String(runtimeContext?.get("companyDescription") || "Winter sports equipment retailer");
-    const conversationHistory = String(runtimeContext?.get("conversationHistory") || "");
-    const conversationStage = String(runtimeContext?.get("conversationStage") || "initial");
-    const userMessage = String(runtimeContext?.get("userMessage") || "");
+    const companyName = String(
+      runtimeContext?.get('companyName') || 'FisSales'
+    );
+    const companyDescription = String(
+      runtimeContext?.get('companyDescription') ||
+        'Winter sports equipment retailer'
+    );
 
     let prompt = await PromptLoader.loadPrompt('frontend-agent');
 
     // Replace placeholders
     prompt = prompt.replaceAll('{companyName}', companyName);
     prompt = prompt.replaceAll('{companyDescription}', companyDescription);
-    prompt = prompt.replaceAll('{conversationHistory}', conversationHistory);
-    prompt = prompt.replaceAll('{conversationStage}', conversationStage);
-    prompt = prompt.replaceAll('{userMessage}', userMessage);
 
     return prompt;
   },
-  model: openai("gpt-4o-mini"),
+  model: openai('gpt-4o-mini'),
+  memory: ({ runtimeContext }) => {
+    const userId = runtimeContext?.get('userId') || 'anonymous';
+    const isAuthenticated = userId !== 'anonymous';
+
+    return new Memory({
+      storage,
+      options: {
+        lastMessages: 10,
+        semanticRecall: { topK: 10, messageRange: 5 },
+        workingMemory: {
+          enabled: true,
+          scope: isAuthenticated ? 'resource' : 'thread'
+        }
+      }
+    });
+  }
 });

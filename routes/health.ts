@@ -16,18 +16,22 @@ router.get('/', async (req, res) => {
       version: process.env['npm_package_version'] || '1.0.0',
       memory: {
         used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
-        total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
+        total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024)
       },
       services: {
-        firebase: await testDatabaseConnection() ? 'connected' : 'disconnected',
-        shopify: await testShopifyIntegration() ? 'connected' : 'disconnected',
-        ai: 'ready',         // AI agents are integrated
-      },
+        firebase: (await testDatabaseConnection())
+          ? 'connected'
+          : 'disconnected',
+        shopify: (await testShopifyIntegration())
+          ? 'connected'
+          : 'disconnected',
+        ai: 'ready' // AI agents are integrated
+      }
     };
 
     logger.info('Health check requested', {
       ip: req.ip,
-      userAgent: req.get('User-Agent'),
+      userAgent: req.get('User-Agent')
     });
 
     res.status(200).json(healthCheck);
@@ -40,8 +44,8 @@ router.get('/', async (req, res) => {
       services: {
         firebase: 'error',
         shopify: 'error',
-        ai: 'ready',
-      },
+        ai: 'ready'
+      }
     });
   }
 });
@@ -58,27 +62,27 @@ router.get('/detailed', (req, res) => {
       used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
       total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
       external: Math.round(process.memoryUsage().external / 1024 / 1024),
-      rss: Math.round(process.memoryUsage().rss / 1024 / 1024),
+      rss: Math.round(process.memoryUsage().rss / 1024 / 1024)
     },
     cpu: {
-      usage: process.cpuUsage(),
+      usage: process.cpuUsage()
     },
     process: {
       pid: process.pid,
       platform: process.platform,
       nodeVersion: process.version,
-      arch: process.arch,
+      arch: process.arch
     },
     services: {
       firebase: 'pending',
       shopify: 'pending',
-      ai: 'ready',
-    },
+      ai: 'ready'
+    }
   };
 
   logger.info('Detailed health check requested', {
     ip: req.ip,
-    userAgent: req.get('User-Agent'),
+    userAgent: req.get('User-Agent')
   });
 
   res.status(200).json(detailedHealthCheck);
@@ -91,15 +95,29 @@ router.get('/env', (req, res) => {
     const envStatus = {
       NODE_ENV: process.env.NODE_ENV || 'NOT SET',
       FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID ? 'SET' : 'NOT SET',
-      FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY ? 'SET (length: ' + process.env.FIREBASE_PRIVATE_KEY.length + ')' : 'NOT SET',
-      FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL ? 'SET' : 'NOT SET',
+      FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY
+        ? 'SET (length: ' + process.env.FIREBASE_PRIVATE_KEY.length + ')'
+        : 'NOT SET',
+      FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL
+        ? 'SET'
+        : 'NOT SET',
       QDRANT_URL: process.env.QDRANT_URL ? 'SET' : 'NOT SET',
-      QDRANT_API_KEY: process.env.QDRANT_API_KEY ? 'SET (length: ' + process.env.QDRANT_API_KEY.length + ')' : 'NOT SET',
-      OPENAI_API_KEY: process.env.OPENAI_API_KEY ? 'SET (length: ' + process.env.OPENAI_API_KEY.length + ')' : 'NOT SET',
-      GOOGLE_API_KEY: process.env.GOOGLE_API_KEY ? 'SET (length: ' + process.env.GOOGLE_API_KEY.length + ')' : 'NOT SET',
-      OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? 'SET (length: ' + process.env.OPENROUTER_API_KEY.length + ')' : 'NOT SET',
+      QDRANT_API_KEY: process.env.QDRANT_API_KEY
+        ? 'SET (length: ' + process.env.QDRANT_API_KEY.length + ')'
+        : 'NOT SET',
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY
+        ? 'SET (length: ' + process.env.OPENAI_API_KEY.length + ')'
+        : 'NOT SET',
+      GOOGLE_API_KEY: process.env.GOOGLE_API_KEY
+        ? 'SET (length: ' + process.env.GOOGLE_API_KEY.length + ')'
+        : 'NOT SET',
+      OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY
+        ? 'SET (length: ' + process.env.OPENROUTER_API_KEY.length + ')'
+        : 'NOT SET',
       WEBSHOP_URL: process.env.WEBSHOP_URL || 'NOT SET',
-      API_TOKEN: process.env.API_TOKEN ? 'SET (length: ' + process.env.API_TOKEN.length + ')' : 'NOT SET',
+      API_TOKEN: process.env.API_TOKEN
+        ? 'SET (length: ' + process.env.API_TOKEN.length + ')'
+        : 'NOT SET',
       SHOPIFY_API_VERSION: process.env.SHOPIFY_API_VERSION || 'NOT SET',
       LOG_LEVEL: process.env.LOG_LEVEL || 'NOT SET',
       LOG_FILE: process.env.LOG_FILE || 'NOT SET',

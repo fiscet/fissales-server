@@ -2,7 +2,7 @@
 
 import {
   MagnifyingGlassIcon,
-  ArrowPathIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 
 interface SearchInterfaceProps {
@@ -33,7 +33,9 @@ export default function SearchInterface({
 }: SearchInterfaceProps) {
   return (
     <div className="card mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">Search Products</h2>
+      <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        Search Products
+      </h2>
 
       <div className="flex gap-4 mb-6">
         <input
@@ -68,7 +70,9 @@ export default function SearchInterface({
 
       {/* Search Examples */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="text-sm font-medium text-blue-900 mb-2">Search Examples:</h3>
+        <h3 className="text-sm font-medium text-blue-900 mb-2">
+          Search Examples:
+        </h3>
         <div className="flex flex-wrap gap-2">
           {SEARCH_EXAMPLES.map((example) => (
             <button

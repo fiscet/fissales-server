@@ -53,9 +53,11 @@ export interface FirestoreCompanyInfo {
 }
 
 // Conversion functions
-export const chatSessionToFirestore = (session: ChatSession): FirestoreChatSession => ({
+export const chatSessionToFirestore = (
+  session: ChatSession
+): FirestoreChatSession => ({
   sessionId: session.sessionId,
-  messages: session.messages.map(msg => ({
+  messages: session.messages.map((msg) => ({
     ...msg,
     timestamp: dateToTimestamp(msg.timestamp)!
   })),
@@ -64,9 +66,11 @@ export const chatSessionToFirestore = (session: ChatSession): FirestoreChatSessi
   lastActive: dateToTimestamp(session.lastActive)!
 });
 
-export const firestoreToChatSession = (data: FirestoreChatSession): ChatSession => ({
+export const firestoreToChatSession = (
+  data: FirestoreChatSession
+): ChatSession => ({
   sessionId: data.sessionId,
-  messages: data.messages.map(msg => ({
+  messages: data.messages.map((msg) => ({
     ...msg,
     timestamp: timestampToDate(msg.timestamp)!
   })),
@@ -93,12 +97,16 @@ export const firestoreToProduct = (data: FirestoreProduct): Product => ({
   embeddings: data.embeddings || []
 });
 
-export const companyInfoToFirestore = (company: CompanyInfo): FirestoreCompanyInfo => ({
+export const companyInfoToFirestore = (
+  company: CompanyInfo
+): FirestoreCompanyInfo => ({
   ...company,
   updatedAt: dateToTimestamp(company.updatedAt)!
 });
 
-export const firestoreToCompanyInfo = (data: FirestoreCompanyInfo): CompanyInfo => ({
+export const firestoreToCompanyInfo = (
+  data: FirestoreCompanyInfo
+): CompanyInfo => ({
   id: data.id,
   name: data.name,
   description: data.description,

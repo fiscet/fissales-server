@@ -49,9 +49,12 @@ export default function ProductsListClient() {
     setSyncing(productId);
 
     try {
-      const response = await fetch(`${API_BASE}/api/products/${productId}/sync-to-qdrant`, {
-        method: 'POST',
-      });
+      const response = await fetch(
+        `${API_BASE}/api/products/${productId}/sync-to-qdrant`,
+        {
+          method: 'POST'
+        }
+      );
 
       const data = await response.json();
 
@@ -68,10 +71,11 @@ export default function ProductsListClient() {
     }
   };
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.descriptionExtra.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = products.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.descriptionExtra.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -147,14 +151,16 @@ export default function ProductsListClient() {
               <p className="text-gray-600">
                 {searchTerm
                   ? 'Try adjusting your search terms'
-                  : 'Import products from Shopify to get started'
-                }
+                  : 'Import products from Shopify to get started'}
               </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <div key={product.id} className="card hover:shadow-md transition-shadow">
+                <div
+                  key={product.id}
+                  className="card hover:shadow-md transition-shadow"
+                >
                   {/* Product Image */}
                   {product.imageUrl && (
                     <div className="mb-4">
@@ -178,7 +184,9 @@ export default function ProductsListClient() {
                     </div>
 
                     <div className="text-sm text-gray-600">
-                      <p><strong>Stock:</strong> {product.stock}</p>
+                      <p>
+                        <strong>Stock:</strong> {product.stock}
+                      </p>
                       <p className="line-clamp-3 mt-2">{product.description}</p>
                       {product.descriptionExtra && (
                         <p className="line-clamp-2 mt-2 text-primary-600">

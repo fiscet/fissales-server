@@ -15,16 +15,16 @@ export default function RegisterForm() {
     name: '',
     email: '',
     password: '',
-    confirmPassword: '',
+    confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { addToast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
 
@@ -56,7 +56,7 @@ export default function RegisterForm() {
 
       // Update user profile with name
       await updateProfile(userCredential.user, {
-        displayName: formData.name,
+        displayName: formData.name
       });
 
       console.log('Profile updated successfully');
@@ -107,7 +107,10 @@ export default function RegisterForm() {
         <form className="mt-8 space-y-6" onSubmit={handleRegister}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Full Name
               </label>
               <input
@@ -124,7 +127,10 @@ export default function RegisterForm() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email address
               </label>
               <input
@@ -141,7 +147,10 @@ export default function RegisterForm() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
@@ -158,7 +167,10 @@ export default function RegisterForm() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Confirm Password
               </label>
               <input
@@ -181,9 +193,7 @@ export default function RegisterForm() {
               disabled={loading}
               className="group relative w-full flex justify-center btn-primary"
             >
-              {loading ? (
-                <LoadingSpinner size="sm" />
-              ) : null}
+              {loading ? <LoadingSpinner size="sm" /> : null}
               {loading ? 'Creating account...' : 'Create account'}
             </button>
           </div>

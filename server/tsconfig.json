@@ -17,28 +17,13 @@
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
-    "types": [
-      "node"
-    ],
-    "lib": [
-      "ES2022",
-      "DOM"
-    ]
+    "types": ["node"],
+    "lib": ["ES2022", "DOM"]
   },
-  "include": [
-    "**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "api",
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ],
+  "include": ["**/*"],
+  "exclude": ["node_modules", "dist", "api", "**/*.test.ts", "**/*.spec.ts"],
   "ts-node": {
     "esm": true
   }
