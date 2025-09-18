@@ -1,10 +1,20 @@
-import { makeShopifyRequest, testShopifyConnection } from '../config/shopify.js';
-import { createProduct, updateProduct, createCompanyInfo } from '../database/utils.js';
+import {
+  makeShopifyRequest,
+  testShopifyConnection
+} from '../config/shopify.js';
+import {
+  createProduct,
+  updateProduct,
+  createCompanyInfo
+} from '../database/utils.js';
 import { Product, CompanyInfo } from '../types/index.js';
 import { logger } from '../utils/logger.js';
 
 // Import all products from Shopify
-export const importAllProducts = async (): Promise<{ success: number; errors: number; }> => {
+export const importAllProducts = async (): Promise<{
+  success: number;
+  errors: number;
+}> => {
   let successCount = 0;
   let errorCount = 0;
   let nextPageInfo: string | null = null;
@@ -14,7 +24,9 @@ export const importAllProducts = async (): Promise<{ success: number; errors: nu
 
     do {
       // Get products from Shopify
-      const endpoint = nextPageInfo ? `/products.json?${nextPageInfo}` : '/products.json';
+      const endpoint = nextPageInfo
+        ? `/products.json?${nextPageInfo}`
+        : '/products.json';
       const response = await makeShopifyRequest(endpoint);
 
       const products = response.products || [];
@@ -28,9 +40,11 @@ export const importAllProducts = async (): Promise<{ success: number; errors: nu
             description: shopifyProduct.body_html || '',
             descriptionExtra: '',
             price: parseFloat(shopifyProduct.variants?.[0]?.price || '0'),
-            stock: parseInt(shopifyProduct.variants?.[0]?.inventory_quantity || '0'),
+            stock: parseInt(
+              shopifyProduct.variants?.[0]?.inventory_quantity || '0'
+            ),
             imageUrl: shopifyProduct.image?.src || '',
-            productUrl: `https://${process.env['WEBSHOP_URL']?.replace(/^https?:\/\//, '')}/products/${shopifyProduct.handle}`,
+            productUrl: `https://${process.env['WEBSHOP_URL']?.replace(/^https?:\/\//, '')}/products/${shopifyProduct.handle}`
           };
 
           await createProduct(product);
@@ -46,10 +60,11 @@ export const importAllProducts = async (): Promise<{ success: number; errors: nu
       // Check for next page
       const linkHeader = response.headers?.get('Link');
       nextPageInfo = extractNextPageInfo(linkHeader);
-
     } while (nextPageInfo);
 
-    logger.info(`Product import completed: ${successCount} successful, ${errorCount} errors`);
+    logger.info(
+      `Product import completed: ${successCount} successful, ${errorCount} errors`
+    );
     return { success: successCount, errors: errorCount };
   } catch (error) {
     logger.error('Product import failed:', error);
@@ -88,10 +103,10 @@ export const importCompanyInfo = async (): Promise<CompanyInfo | null> => {
           city: shop.city,
           province: shop.province,
           country: shop.country,
-          zip: shop.zip,
-        },
+          zip: shop.zip
+        }
       },
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
 
     await createCompanyInfo(companyInfo);
@@ -105,7 +120,9 @@ export const importCompanyInfo = async (): Promise<CompanyInfo | null> => {
 };
 
 // Update specific product from Shopify
-export const updateProductFromShopify = async (productId: string): Promise<Product | null> => {
+export const updateProductFromShopify = async (
+  productId: string
+): Promise<Product | null> => {
   try {
     logger.info(`Updating product from Shopify: ${productId}`);
 
@@ -124,7 +141,7 @@ export const updateProductFromShopify = async (productId: string): Promise<Produ
       price: parseFloat(shopifyProduct.variants?.[0]?.price || '0'),
       stock: parseInt(shopifyProduct.variants?.[0]?.inventory_quantity || '0'),
       imageUrl: shopifyProduct.image?.src || '',
-      productUrl: `https://${process.env['WEBSHOP_URL']?.replace(/^https?:\/\//, '')}/products/${shopifyProduct.handle}`,
+      productUrl: `https://${process.env['WEBSHOP_URL']?.replace(/^https?:\/\//, '')}/products/${shopifyProduct.handle}`
     };
 
     await updateProduct(productId, product);
@@ -138,7 +155,9 @@ export const updateProductFromShopify = async (productId: string): Promise<Produ
 };
 
 // Get product list from Shopify (without importing)
-export const getShopifyProducts = async (limit: number = 50): Promise<any[]> => {
+export const getShopifyProducts = async (
+  limit: number = 50
+): Promise<any[]> => {
   try {
     const response = await makeShopifyRequest(`/products.json?limit=${limit}`);
     return response.products || [];

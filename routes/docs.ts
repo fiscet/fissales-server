@@ -14,31 +14,38 @@ router.get('/', (req, res) => {
       endpoints: {
         health: {
           'GET /api/health': 'Health check endpoint',
-          'GET /api/health/detailed': 'Detailed health check with system info',
+          'GET /api/health/detailed': 'Detailed health check with system info'
         },
         chat: {
           'POST /api/chat': 'Send message to AI agents',
           'GET /api/chat/history': 'Get chat history for session',
           'DELETE /api/chat/history': 'Clear chat history',
           'GET /api/chat/session': 'Get session info',
-          'POST /api/chat/test': 'Test AI agents (no history save)',
+          'POST /api/chat/test': 'Test AI agents (no history save)'
         },
         shopify: {
-          'POST /api/shopify/import-products': 'Import all products from Shopify',
-          'POST /api/shopify/import-company': 'Import company info from Shopify',
-          'PUT /api/shopify/update-product/:productId': 'Update specific product',
+          'POST /api/shopify/import-products':
+            'Import all products from Shopify',
+          'POST /api/shopify/import-company':
+            'Import company info from Shopify',
+          'PUT /api/shopify/update-product/:productId':
+            'Update specific product',
           'GET /api/shopify/products': 'Get all products from database',
           'GET /api/shopify/shopify-products': 'Get products from Shopify',
           'GET /api/shopify/company': 'Get company info from database',
           'GET /api/shopify/shop': 'Get shop info from Shopify',
-          'GET /api/shopify/test': 'Test Shopify connection',
+          'GET /api/shopify/test': 'Test Shopify connection'
         },
         products: {
-          'PUT /api/products/:productId/description-extra': 'Update product descriptionExtra field',
-          'POST /api/products/sync-to-qdrant': 'Sync all products from Firestore to Qdrant',
-          'POST /api/products/:productId/sync-to-qdrant': 'Sync single product to Qdrant',
-          'POST /api/products/search': 'Search products in Qdrant using vector similarity',
-        },
+          'PUT /api/products/:productId/description-extra':
+            'Update product descriptionExtra field',
+          'POST /api/products/sync-to-qdrant':
+            'Sync all products from Firestore to Qdrant',
+          'POST /api/products/:productId/sync-to-qdrant':
+            'Sync single product to Qdrant',
+          'POST /api/products/search':
+            'Search products in Qdrant using vector similarity'
+        }
       },
       features: {
         'Multi-Agent System': 'AI agents for different conversation types',
@@ -46,15 +53,15 @@ router.get('/', (req, res) => {
         'Session Management': 'Anonymous session tracking',
         'Shopify Integration': 'Product and company data synchronization',
         'Chat History': 'Persistent conversation history',
-        'Health Monitoring': 'System health and service status',
+        'Health Monitoring': 'System health and service status'
       },
       agents: {
-        'FrontendAgent': 'Intent detection and message analysis',
-        'HistoryAgent': 'Chat history management',
-        'CompanyAgent': 'Company information handling',
-        'PreSalesAgent': 'Initial sales interaction',
-        'SalesAgent': 'Sales conversation handling',
-        'RagAgent': 'Product search and recommendations',
+        FrontendAgent: 'Intent detection and message analysis',
+        HistoryAgent: 'Chat history management',
+        CompanyAgent: 'Company information handling',
+        PreSalesAgent: 'Initial sales interaction',
+        SalesAgent: 'Sales conversation handling',
+        RagAgent: 'Product search and recommendations'
       },
       environment: {
         required: [
@@ -62,23 +69,20 @@ router.get('/', (req, res) => {
           'FIREBASE_PRIVATE_KEY',
           'FIREBASE_CLIENT_EMAIL',
           'WEBSHOP_URL',
-          'API_TOKEN',
+          'API_TOKEN'
         ],
-        optional: [
-          'SHOPIFY_API_VERSION',
-          'PORT',
-          'NODE_ENV',
-        ],
+        optional: ['SHOPIFY_API_VERSION', 'PORT', 'NODE_ENV']
       },
       examples: {
         'Chat with AI': {
           method: 'POST',
           url: '/api/chat',
           body: {
-            message: 'I\'m looking for products'
+            message: "I'm looking for products"
           },
           response: {
-            response: 'I\'d be happy to help you find the perfect products! What specific type of product are you looking for?',
+            response:
+              "I'd be happy to help you find the perfect products! What specific type of product are you looking for?",
             sessionId: 'session-123',
             timestamp: '2024-01-01T00:00:00.000Z'
           }
@@ -139,7 +143,7 @@ router.get('/', (req, res) => {
 
     logger.info('API documentation requested', {
       ip: req.ip,
-      userAgent: req.get('User-Agent'),
+      userAgent: req.get('User-Agent')
     });
 
     res.status(200).json(apiDocs);
@@ -149,7 +153,7 @@ router.get('/', (req, res) => {
       error: 'Documentation Generation Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'DOCS_GENERATION_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });

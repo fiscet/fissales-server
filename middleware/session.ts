@@ -14,7 +14,11 @@ declare global {
 }
 
 // Session management middleware
-export const sessionMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const sessionMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     let sessionId = req.headers['x-session-id'] as string;
 
@@ -48,7 +52,11 @@ export const sessionMiddleware = async (req: Request, res: Response, next: NextF
 };
 
 // Session validation middleware
-export const validateSession = (req: Request, res: Response, next: NextFunction) => {
+export const validateSession = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   if (!req.sessionId) {
     return res.status(400).json({
       error: 'Session Required',
@@ -61,7 +69,11 @@ export const validateSession = (req: Request, res: Response, next: NextFunction)
 };
 
 // Session cleanup middleware (for session termination)
-export const cleanupSession = async (req: Request, _res: Response, next: NextFunction) => {
+export const cleanupSession = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
   try {
     const sessionId = req.sessionId;
 
@@ -82,13 +94,19 @@ export const cleanupSession = async (req: Request, _res: Response, next: NextFun
 };
 
 // Session activity tracking
-export const trackSessionActivity = async (req: Request, res: Response, next: NextFunction) => {
+export const trackSessionActivity = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const originalSend = res.send;
 
   res.send = function (data) {
     // Track session activity before sending response
     if (req.sessionId) {
-      logger.debug(`Session activity: ${req.sessionId} - ${req.method} ${req.path}`);
+      logger.debug(
+        `Session activity: ${req.sessionId} - ${req.method} ${req.path}`
+      );
     }
 
     return originalSend.call(this, data);

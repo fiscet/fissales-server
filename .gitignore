@@ -44,3 +44,6 @@ firestore-debug.log
 # Cache
 .cache/
 .temp/
+
+# Materials/Resources
+materiale/

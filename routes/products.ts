@@ -1,6 +1,12 @@
 import { Router } from 'express';
 import { logger } from '../utils/logger.js';
-import { getProduct, updateProduct, getAllProducts, updateSyncMetadata, getSyncMetadata } from '../database/utils.js';
+import {
+  getProduct,
+  updateProduct,
+  getAllProducts,
+  updateSyncMetadata,
+  getSyncMetadata
+} from '../database/utils.js';
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
 import { QdrantVector } from '@mastra/qdrant';
@@ -8,14 +14,13 @@ import { v5 as uuidv5 } from 'uuid';
 
 const router = Router();
 
-
 const QDRANT_COLLECTION = 'products';
 const QDRANT_NAMESPACE = '6ba7b810-9dad-11d1-80b4-00c04fd430c8'; // Fixed namespace for consistent UUIDs
 
 async function initQdrant() {
   const qdrant = new QdrantVector({
     url: process.env['QDRANT_URL']!,
-    apiKey: process.env['QDRANT_API_KEY']!,
+    apiKey: process.env['QDRANT_API_KEY']!
   });
 
   // Create the collection in Qdrant if it doesn't exist
@@ -23,7 +28,7 @@ async function initQdrant() {
     await qdrant.createIndex({
       indexName: QDRANT_COLLECTION,
       dimension: 1536,
-      metric: 'cosine',
+      metric: 'cosine'
     });
     logger.info(`Qdrant collection ${QDRANT_COLLECTION} created or verified`);
   } catch (error) {
@@ -44,7 +49,7 @@ router.put('/:productId/description-extra', async (req, res) => {
         error: 'Product ID Required',
         message: 'Product ID is required',
         code: 'PRODUCT_ID_REQUIRED',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
@@ -53,7 +58,7 @@ router.put('/:productId/description-extra', async (req, res) => {
         error: 'Invalid Description Extra',
         message: 'descriptionExtra must be a string',
         code: 'INVALID_DESCRIPTION_EXTRA',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
@@ -66,20 +71,22 @@ router.put('/:productId/description-extra', async (req, res) => {
         error: 'Product Not Found',
         message: `Product ${productId} not found`,
         code: 'PRODUCT_NOT_FOUND',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
     // Aggiorna solo il campo descriptionExtra
     await updateProduct(productId, { descriptionExtra });
 
-    logger.info(`DescriptionExtra updated successfully for product: ${productId}`);
+    logger.info(
+      `DescriptionExtra updated successfully for product: ${productId}`
+    );
 
     return res.status(200).json({
       message: 'Product description extra updated successfully',
       productId,
       descriptionExtra,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Update description extra failed:', error);
@@ -87,7 +94,7 @@ router.put('/:productId/description-extra', async (req, res) => {
       error: 'Update Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'UPDATE_DESCRIPTION_EXTRA_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -107,14 +114,14 @@ router.post('/sync-to-qdrant', async (req, res) => {
       return res.status(200).json({
         message: 'No products found to sync',
         synced: 0,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
     logger.info(`Found ${products.length} products to sync`);
 
     // Prepara i testi per l'embedding
-    const textsToEmbed = products.map(product =>
+    const textsToEmbed = products.map((product) =>
       `${product.name} ${product.description} ${product.descriptionExtra}`.trim()
     );
 
@@ -122,11 +129,11 @@ router.post('/sync-to-qdrant', async (req, res) => {
     logger.info('Generating embeddings for products');
     const { embeddings } = await embedMany({
       model: openai.embedding('text-embedding-3-small'),
-      values: textsToEmbed,
+      values: textsToEmbed
     });
 
     // Prepara i metadati per Qdrant
-    const metadata = products.map(product => ({
+    const metadata = products.map((product) => ({
       id: product.id,
       name: product.name,
       description: product.description,
@@ -135,7 +142,7 @@ router.post('/sync-to-qdrant', async (req, res) => {
       stock: product.stock,
       imageUrl: product.imageUrl,
       productUrl: product.productUrl,
-      text: `${product.name} ${product.description} ${product.descriptionExtra}`.trim(),
+      text: `${product.name} ${product.description} ${product.descriptionExtra}`.trim()
     }));
 
     // Carica i dati in Qdrant
@@ -146,7 +153,7 @@ router.post('/sync-to-qdrant', async (req, res) => {
       indexName: QDRANT_COLLECTION,
       vectorsLength: embeddings.length,
       metadataLength: metadata.length,
-      idsLength: products.map(p => p.id).length,
+      idsLength: products.map((p) => p.id).length,
       firstEmbedding: embeddings[0] ? embeddings[0].slice(0, 5) : 'none',
       firstMetadata: metadata[0] || 'none',
       firstId: products[0]?.id || 'none'
@@ -156,7 +163,7 @@ router.post('/sync-to-qdrant', async (req, res) => {
       indexName: QDRANT_COLLECTION,
       vectors: embeddings,
       metadata,
-      ids: products.map(p => uuidv5(p.id, QDRANT_NAMESPACE)),
+      ids: products.map((p) => uuidv5(p.id, QDRANT_NAMESPACE))
     });
 
     logger.info(`Successfully synced ${products.length} products to Qdrant`);
@@ -170,7 +177,7 @@ router.post('/sync-to-qdrant', async (req, res) => {
       message: 'Products synced to Qdrant successfully',
       synced: products.length,
       collection: QDRANT_COLLECTION,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Sync to Qdrant failed:', error);
@@ -178,7 +185,7 @@ router.post('/sync-to-qdrant', async (req, res) => {
       error: 'Sync Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'SYNC_TO_QDRANT_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -193,7 +200,7 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
         error: 'Product ID Required',
         message: 'Product ID is required',
         code: 'PRODUCT_ID_REQUIRED',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
@@ -204,16 +211,22 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
 
     // Verify collection exists and get info
     try {
-      const collectionInfo = await qdrant.describeIndex({ indexName: QDRANT_COLLECTION });
+      const collectionInfo = await qdrant.describeIndex({
+        indexName: QDRANT_COLLECTION
+      });
       console.log('Collection info:', collectionInfo);
 
       // Check if dimensions match
       if (collectionInfo.dimension !== 1536) {
-        throw new Error(`Dimension mismatch: collection has ${collectionInfo.dimension}, but embeddings will be ${1536}`);
+        throw new Error(
+          `Dimension mismatch: collection has ${collectionInfo.dimension}, but embeddings will be ${1536}`
+        );
       }
     } catch (describeError) {
       console.error('Failed to describe collection:', describeError);
-      throw new Error(`Collection ${QDRANT_COLLECTION} does not exist or is not accessible`);
+      throw new Error(
+        `Collection ${QDRANT_COLLECTION} does not exist or is not accessible`
+      );
     }
 
     // Recupera il prodotto da Firestore
@@ -223,18 +236,19 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
         error: 'Product Not Found',
         message: `Product ${productId} not found`,
         code: 'PRODUCT_NOT_FOUND',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
     // Prepara il testo per l'embedding
-    const textToEmbed = `${product.name} ${product.description} ${product.descriptionExtra}`.trim();
+    const textToEmbed =
+      `${product.name} ${product.description} ${product.descriptionExtra}`.trim();
 
     // Genera l'embedding usando OpenAI
     logger.info(`Generating embedding for product ${productId}`);
     const { embeddings } = await embedMany({
       model: openai.embedding('text-embedding-3-small'),
-      values: [textToEmbed],
+      values: [textToEmbed]
     });
 
     // Prepara i metadati per Qdrant (ensure all values are serializable)
@@ -247,7 +261,7 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
       stock: Number(product.stock) || 0,
       imageUrl: String(product.imageUrl || ''),
       productUrl: String(product.productUrl || ''),
-      text: String(textToEmbed),
+      text: String(textToEmbed)
     };
 
     // Carica il prodotto in Qdrant
@@ -274,7 +288,7 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
       indexName: QDRANT_COLLECTION,
       vectors: [vectorToInsert],
       metadata: [metadata],
-      ids: [idToInsert],
+      ids: [idToInsert]
     };
     console.log('Final upsert params:', JSON.stringify(upsertParams, null, 2));
 
@@ -283,7 +297,7 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
         indexName: QDRANT_COLLECTION,
         vectors: [vectorToInsert],
         metadata: [metadata],
-        ids: [idToInsert],
+        ids: [idToInsert]
       });
       console.log('✅ Qdrant upsert successful:', upsertResult);
     } catch (qdrantError: any) {
@@ -311,7 +325,7 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
       message: 'Product synced to Qdrant successfully',
       productId,
       collection: QDRANT_COLLECTION,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error(`Sync single product to Qdrant failed:`, error);
@@ -319,7 +333,7 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
       error: 'Sync Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'SYNC_SINGLE_PRODUCT_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -334,7 +348,7 @@ router.post('/search', async (req, res) => {
         error: 'Query Required',
         message: 'Query string is required',
         code: 'QUERY_REQUIRED',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
@@ -346,14 +360,14 @@ router.post('/search', async (req, res) => {
     // Generate embedding for the query
     const { embeddings } = await embedMany({
       model: openai.embedding('text-embedding-3-small'),
-      values: [query],
+      values: [query]
     });
 
     // Search in Qdrant
     const searchResults = await qdrant.query({
       indexName: QDRANT_COLLECTION,
       queryVector: embeddings[0],
-      topK: limit,
+      topK: limit
     });
 
     logger.info(`Found ${searchResults.length} results for query: "${query}"`);
@@ -362,14 +376,14 @@ router.post('/search', async (req, res) => {
     const formattedResults = searchResults.map((result: any) => ({
       productId: result.id,
       score: result.score,
-      product: result.metadata,
+      product: result.metadata
     }));
 
     return res.status(200).json({
       query,
       results: formattedResults,
       count: formattedResults.length,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Qdrant search failed:', error);
@@ -377,7 +391,7 @@ router.post('/search', async (req, res) => {
       error: 'Search Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'QDRANT_SEARCH_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -389,14 +403,16 @@ router.get('/qdrant/stats', async (req, res) => {
     const qdrant = await initQdrant();
 
     // Get collection info
-    const collectionInfo = await qdrant.describeIndex({ indexName: QDRANT_COLLECTION });
+    const collectionInfo = await qdrant.describeIndex({
+      indexName: QDRANT_COLLECTION
+    });
 
     return res.status(200).json({
       collection: QDRANT_COLLECTION,
       count: collectionInfo.count,
       dimension: collectionInfo.dimension,
       metric: collectionInfo.metric,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Failed to get Qdrant stats:', error);
@@ -404,7 +420,7 @@ router.get('/qdrant/stats', async (req, res) => {
       error: 'Stats Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'QDRANT_STATS_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -417,7 +433,7 @@ router.get('/sync/stats', async (_req, res) => {
     return res.status(200).json({
       lastShopifySync: syncMetadata?.lastShopifySync?.toISOString(),
       lastQdrantSync: syncMetadata?.lastQdrantSync?.toISOString(),
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     logger.error('Failed to get sync metadata:', error);
@@ -425,7 +441,7 @@ router.get('/sync/stats', async (_req, res) => {
       error: 'Sync Stats Failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       code: 'SYNC_STATS_ERROR',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });

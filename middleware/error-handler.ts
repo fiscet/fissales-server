@@ -22,7 +22,7 @@ export const errorHandler = (
     url: req.url,
     method: req.method,
     ip: req.ip,
-    userAgent: req.get('User-Agent'),
+    userAgent: req.get('User-Agent')
   });
 
   // Handle specific error types
@@ -51,7 +51,7 @@ export const errorHandler = (
     message,
     code: err.code || 'INTERNAL_ERROR',
     timestamp: new Date().toISOString(),
-    ...(process.env['NODE_ENV'] === 'development' && { stack: err.stack }),
+    ...(process.env['NODE_ENV'] === 'development' && { stack: err.stack })
   });
 };
 
@@ -72,14 +72,25 @@ export class CustomError extends Error implements AppError {
 }
 
 // Error factory functions
-export const createError = (message: string, statusCode: number, code: string) => {
+export const createError = (
+  message: string,
+  statusCode: number,
+  code: string
+) => {
   return new CustomError(message, statusCode, code);
 };
 
-export const badRequest = (message: string) => createError(message, 400, 'BAD_REQUEST');
-export const unauthorized = (message: string) => createError(message, 401, 'UNAUTHORIZED');
-export const forbidden = (message: string) => createError(message, 403, 'FORBIDDEN');
-export const notFound = (message: string) => createError(message, 404, 'NOT_FOUND');
-export const conflict = (message: string) => createError(message, 409, 'CONFLICT');
-export const tooManyRequests = (message: string) => createError(message, 429, 'TOO_MANY_REQUESTS');
-export const internalError = (message: string) => createError(message, 500, 'INTERNAL_ERROR');
+export const badRequest = (message: string) =>
+  createError(message, 400, 'BAD_REQUEST');
+export const unauthorized = (message: string) =>
+  createError(message, 401, 'UNAUTHORIZED');
+export const forbidden = (message: string) =>
+  createError(message, 403, 'FORBIDDEN');
+export const notFound = (message: string) =>
+  createError(message, 404, 'NOT_FOUND');
+export const conflict = (message: string) =>
+  createError(message, 409, 'CONFLICT');
+export const tooManyRequests = (message: string) =>
+  createError(message, 429, 'TOO_MANY_REQUESTS');
+export const internalError = (message: string) =>
+  createError(message, 500, 'INTERNAL_ERROR');

@@ -13,6 +13,7 @@ import { docsRouter } from './routes/docs.js';
 import { performanceRouter } from './routes/performance.js';
 import { productsRouter } from './routes/products.js';
 import { companyRouter } from './routes/company.js';
+import { promptsRouter } from './routes/prompts.js';
 
 // Load environment variables (only in development)
 if (process.env.NODE_ENV !== 'production') {
@@ -24,12 +25,14 @@ const PORT = process.env['PORT'] || 8080;
 
 // Security middleware
 app.use(helmet());
-app.use(cors({
-  origin: 'https://fissales-admin.vercel.app',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: 'https://fissales-admin.vercel.app',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  })
+);
 
 // Rate limiting
 const limiter = rateLimit({
@@ -37,7 +40,7 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: false
 });
 app.use(limiter);
 
@@ -61,6 +64,7 @@ app.use('/api/health', healthRouter);
 app.use('/api/shopify', shopifyRouter);
 app.use('/api/chat', chatRouter); // Main chat endpoint
 app.use('/api/company', companyRouter); // Company information management
+app.use('/api/prompts', promptsRouter); // Prompt management API
 app.use('/api/docs', docsRouter);
 app.use('/api/performance', performanceRouter);
 app.use('/api/products', productsRouter);

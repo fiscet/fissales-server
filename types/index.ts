@@ -120,3 +120,11 @@ export interface EnvironmentConfig {
   FIREBASE_PRIVATE_KEY: string;
   FIREBASE_CLIENT_EMAIL: string;
 }
+
+// Mastra types
+export interface MastraContext {
+  sessionId: string;
+  userId?: string;
+  companyName?: string;
+  companyDescription?: string;
+}
