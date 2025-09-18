@@ -2,7 +2,7 @@
 
 ## Base URL
 ```
-http://localhost:4111/api
+http://localhost:8080/api
 ```
 
 ---
@@ -253,15 +253,15 @@ const chatResponse = await fetch('/api/chat', {
 ### cURL
 ```bash
 # List prompts
-curl -X GET http://localhost:4111/api/prompts
+curl -X GET http://localhost:8080/api/prompts
 
 # Update prompt
-curl -X POST http://localhost:4111/api/prompts/frontend-agent \
+curl -X POST http://localhost:8080/api/prompts/frontend-agent \
   -H "Content-Type: application/json" \
   -d '{"content": "You are a helpful assistant..."}'
 
 # Chat
-curl -X POST http://localhost:4111/api/chat \
+curl -X POST http://localhost:8080/api/chat \
   -H "Content-Type: application/json" \
   -d '{"message": "Hello", "sessionId": "test_123"}'
 ```
