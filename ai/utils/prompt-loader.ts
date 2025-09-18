@@ -1,8 +1,14 @@
 import { logger } from '../../utils/logger.js';
 import { getFirestore } from 'firebase-admin/firestore';
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+
+// Load environment variables first
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 // Prompt loader implementation
 class PromptLoaderClass {
