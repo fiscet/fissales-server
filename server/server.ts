@@ -4,18 +4,20 @@ import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
-import { logger } from './utils/logger';
-import { errorHandler } from './middleware/error-handler';
-import { healthRouter } from './routes/health';
-import { shopifyRouter } from './routes/shopify';
-import { chatRouter } from './routes/chat';
-import { docsRouter } from './routes/docs';
-import { performanceRouter } from './routes/performance';
-import { productsRouter } from './routes/products';
-import { companyRouter } from './routes/company';
+import { logger } from './utils/logger.js';
+import { errorHandler } from './middleware/error-handler.js';
+import { healthRouter } from './routes/health.js';
+import { shopifyRouter } from './routes/shopify.js';
+import { chatRouter } from './routes/chat.js';
+import { docsRouter } from './routes/docs.js';
+import { performanceRouter } from './routes/performance.js';
+import { productsRouter } from './routes/products.js';
+import { companyRouter } from './routes/company.js';
 
-// Load environment variables
-dotenv.config();
+// Load environment variables (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 const app = express();
 const PORT = process.env['PORT'] || 8080;

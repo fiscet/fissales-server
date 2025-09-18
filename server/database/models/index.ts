@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase-admin/firestore';
-import { ChatSession, Product, CompanyInfo } from '../../types';
+import { ChatSession, Product, CompanyInfo } from '../../types/index.js';
 
 // Convert Firestore Timestamp to Date
 export const timestampToDate = (timestamp: Timestamp | null): Date | null => {

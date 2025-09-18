@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { getChatSession, createChatSession } from '../database/utils';
-import { logger } from '../utils/logger';
+import { getChatSession, createChatSession } from '../database/utils.js';
+import { logger } from '../utils/logger.js';
 
 // Extend Request interface to include session
 declare global {

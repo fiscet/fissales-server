@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { logger } from '../utils/logger';
-import { importCompanyInfo } from '../services/shopify';
-import { getSingleCompanyInfo } from '../database/utils';
+import { logger } from '../utils/logger.js';
+import { importCompanyInfo } from '../services/shopify.js';
+import { getSingleCompanyInfo } from '../database/utils.js';
 
 const router = Router();
 

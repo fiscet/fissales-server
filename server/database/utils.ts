@@ -1,7 +1,7 @@
 import {
   getFirestoreInstance,
   testFirebaseConnection
-} from '../config/firebase';
+} from '../config/firebase.js';
 import { FieldValue } from 'firebase-admin/firestore';
 import {
   chatSessionToFirestore,
@@ -10,9 +10,9 @@ import {
   firestoreToProduct,
   companyInfoToFirestore,
   firestoreToCompanyInfo
-} from './models';
+} from './models/index.js';
 import { ChatSession, Product, CompanyInfo } from '../types';
-import { logger } from '../utils/logger';
+import { logger } from '../utils/logger.js';
 
 // Collection names
 const COLLECTIONS = {

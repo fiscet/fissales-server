@@ -1,6 +1,6 @@
 // Base URL for the server API
 const getServerUrl = () => {
-  return process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
+  return process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080';
 };
 
 // Test Shopify connection via server API

@@ -1,6 +1,6 @@
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
-import { logger } from '../utils/logger';
+import { logger } from '../utils/logger.js';
 
 // Firebase configuration - lazy loading
 const getFirebaseConfig = () => ({

@@ -22,7 +22,7 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-bucket.firebasestorage.app
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
-NEXT_PUBLIC_API_BASE=http://localhost:3000
+NEXT_PUBLIC_API_BASE=http://localhost:8080
 ```
 
 ## 📱 Features

@@ -1,20 +1,11 @@
 {
   "apphosting": [
     {
+      "app": "fissales-chatbot",
+      "project": "fissales-server",
+      "source": ".",
       "backendId": "fissales-server",
-      "rootDir": "/server/",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
-      ],
-      "alwaysDeployFromSource": true
-    },
-    {
-      "backendId": "fissales-server",
-      "rootDir": "/",
+      "rootDir": "./",
       "ignore": [
         "node_modules",
         ".git",

@@ -1,7 +1,7 @@
-import { makeShopifyRequest, testShopifyConnection } from '../config/shopify';
-import { createProduct, updateProduct, createCompanyInfo } from '../database/utils';
-import { Product, CompanyInfo } from '../types';
-import { logger } from '../utils/logger';
+import { makeShopifyRequest, testShopifyConnection } from '../config/shopify.js';
+import { createProduct, updateProduct, createCompanyInfo } from '../database/utils.js';
+import { Product, CompanyInfo } from '../types/index.js';
+import { logger } from '../utils/logger.js';
 
 // Import all products from Shopify
 export const importAllProducts = async (): Promise<{ success: number; errors: number; }> => {

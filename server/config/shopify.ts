@@ -1,4 +1,4 @@
-import { logger } from '../utils/logger';
+import { logger } from '../utils/logger.js';
 
 // Shopify configuration - lazy loading
 const getShopifyConfig = () => ({

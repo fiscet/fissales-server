@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { logger } from '../utils/logger';
-import { getProduct, updateProduct, getAllProducts, updateSyncMetadata, getSyncMetadata } from '../database/utils';
+import { logger } from '../utils/logger.js';
+import { getProduct, updateProduct, getAllProducts, updateSyncMetadata, getSyncMetadata } from '../database/utils.js';
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
 import { QdrantVector } from '@mastra/qdrant';

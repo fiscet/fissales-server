@@ -1,5 +1,5 @@
-import { logger } from '../utils/logger';
-import { importAllProducts, importCompanyInfo } from './shopify';
+import { logger } from '../utils/logger.js';
+import { importAllProducts, importCompanyInfo } from './shopify.js';
 
 // Synchronization status
 interface SyncStatus {

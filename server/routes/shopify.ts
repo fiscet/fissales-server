@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { logger } from '../utils/logger';
+import { logger } from '../utils/logger.js';
 import {
   importAllProducts,
   importCompanyInfo,
@@ -7,8 +7,8 @@ import {
   getShopifyProducts,
   getShopInfo,
   testShopifyIntegration,
-} from '../services/shopify';
-import { getAllProducts, getCompanyInfo, updateSyncMetadata } from '../database/utils';
+} from '../services/shopify.js';
+import { getAllProducts, getCompanyInfo, updateSyncMetadata } from '../database/utils.js';
 
 const router = Router();
 

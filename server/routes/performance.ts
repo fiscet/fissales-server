@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { PromptLoader } from '../ai/utils/prompt-loader';
-import { logger } from '../utils/logger';
+import { PromptLoader } from '../ai/utils/prompt-loader.js';
+import { logger } from '../utils/logger.js';
 
 const router = Router();
 

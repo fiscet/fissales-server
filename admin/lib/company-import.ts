@@ -2,7 +2,7 @@ import { CompanyInfo } from '../types';
 
 // Base URL for the server API
 const getServerUrl = () => {
-  return process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
+  return process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080';
 };
 
 // Import company info from Shopify via server API
