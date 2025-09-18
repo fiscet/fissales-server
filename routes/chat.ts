@@ -3,6 +3,7 @@ import { logger } from '../utils/logger.js';
 import { getMastra } from '../ai/mastra.js';
 import { RuntimeContext } from '@mastra/core/runtime-context';
 import { getCompanyInfoCached } from '../utils/company-cache.js';
+import { MastraContext } from '@/types/index.js';
 
 const router = Router();
 
@@ -40,7 +41,7 @@ router.post('/', async (req, res) => {
     const companyInfo = await getCompanyInfoCached();
 
     // Create runtime context with company data and session info
-    const runtimeContext = new RuntimeContext();
+    const runtimeContext = new RuntimeContext<MastraContext>();
     runtimeContext.set('sessionId', sessionId);
     runtimeContext.set('userId', userId || 'anonymous');
     runtimeContext.set('companyName', companyInfo?.name || '');
