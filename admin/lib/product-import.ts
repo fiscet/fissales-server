@@ -2,7 +2,7 @@ import { Product, ApiResponse, SyncResponse } from '../types';
 
 // Base URL for the server API
 const getServerUrl = () => {
-  return process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080';
+  return process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8080';
 };
 
 // Import all products from Shopify via server API
