@@ -7,7 +7,7 @@ import { MastraContext } from '@/types/index.js';
 
 const router = Router();
 
-// Main chat endpoint - simple placeholder for now
+// Main chat endpoint - AI agent conversations
 router.post('/', async (req, res) => {
   try {
     const { message, sessionId, userId } = req.body;

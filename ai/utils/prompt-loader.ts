@@ -156,6 +156,25 @@ class PromptLoaderClass {
       return [];
     }
   }
+
+  async deletePromptFromFirestore(promptName: string): Promise<void> {
+    this.initializeFirebase();
+    if (!this.db) {
+      throw new Error('Firestore not available');
+    }
+
+    try {
+      await this.db.collection('prompts').doc(promptName).delete();
+
+      // Clear cache to ensure it's not loaded from cache
+      this.cache.delete(promptName);
+
+      logger.info(`Prompt deleted from Firestore: ${promptName}`);
+    } catch (error) {
+      logger.error(`Failed to delete prompt from Firestore: ${promptName}`, error);
+      throw error;
+    }
+  }
 }
 
 export const PromptLoader = new PromptLoaderClass();
