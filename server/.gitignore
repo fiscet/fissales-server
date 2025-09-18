@@ -35,6 +35,7 @@ Thumbs.db
 .firebase/
 firebase-debug.log
 firestore-debug.log
+apphosting.yaml
 
 # Database
 *.db
@@ -44,6 +45,3 @@ firestore-debug.log
 # Cache
 .cache/
 .temp/
-
-# Materials/Resources
-materiale/

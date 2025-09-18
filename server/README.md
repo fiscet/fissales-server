@@ -17,8 +17,8 @@ FisSales is a comprehensive multi-agent AI system that provides intelligent sale
 
 The project is structured as a **single-instance deployment** that combines:
 
-- **Express API Server** - Handles HTTP requests, AI agents, and Shopify integration
-- **Admin Dashboard** - Next.js-based management interface (deployed separately on Vercel)
+- **Express API Server** (`server/`) - Handles HTTP requests, AI agents, and Shopify integration
+- **Admin Dashboard** (`admin/`) - Next.js-based management interface
 
 ## 🤖 AI Agents System
 
@@ -117,7 +117,7 @@ The system employs six specialized AI agents, each with distinct responsibilitie
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd fissales-server
+   cd fissales
    ```
 
 2. **Install dependencies**
@@ -141,16 +141,31 @@ The system employs six specialized AI agents, each with distinct responsibilitie
    npm run dev
    ```
 
+5. **Start Admin Dashboard** (in a new terminal)
+   ```bash
+   cd admin
+   npm install
+   npm run dev
+   ```
+
 ## 🚀 Usage
 
 ### API Server
-The main API server runs on `http://localhost:8080` and provides:
+The main API server runs on `http://localhost:3000` and provides:
 
 - **Chat Endpoint**: `POST /api/chat` - Main conversation interface
 - **Product Search**: `POST /api/products/search` - Vector-based product search
 - **Shopify Sync**: `GET /api/shopify/sync` - Synchronize product data
 - **Health Check**: `GET /api/health` - System status monitoring
 - **Documentation**: `GET /api/docs` - API documentation
+
+### Admin Dashboard
+Access the admin dashboard at `http://localhost:3001`:
+
+- **Dashboard**: Overview of system statistics and quick actions
+- **Products**: Manage product catalog and sync data
+- **Search**: Test vector search functionality
+- **Authentication**: Secure login system for administrators
 
 ### Chat Integration
 Integrate the chat system into your frontend:
@@ -210,7 +225,7 @@ npm run clean        # Clean build artifacts and cache
 - `QDRANT_API_KEY` - Qdrant API key
 
 #### Optional
-- `PORT` - Server port (default: 8080)
+- `PORT` - Server port (default: 3000)
 - `NODE_ENV` - Environment mode (development/production)
 - `SHOPIFY_API_VERSION` - Shopify API version (default: 2025-04)
 - `LOG_LEVEL` - Logging level (default: info)
@@ -232,21 +247,26 @@ npm run clean        # Clean build artifacts and cache
 ## 🗂️ Project Structure
 
 ```
-fissales-server/
-├── ai/                             # AI integration and agents
-│   ├── agents/                     # Agent implementations
-│   ├── prompts/                    # Agent prompt templates
-│   ├── tools/                      # AI tools and utilities
-│   └── utils/                      # AI utility functions
-├── config/                         # Configuration files
-├── database/                       # Database utilities
-├── middleware/                     # Express middleware
-├── routes/                         # API route handlers
-├── services/                       # Business logic services
-├── types/                          # TypeScript type definitions
-├── utils/                          # Utility functions
+fissales/
+├── admin/                          # Next.js Admin Dashboard
+│   ├── app/                        # App router pages
+│   ├── components/                 # React components
+│   ├── lib/                        # Utility libraries
+│   └── types/                      # TypeScript type definitions
+├── server/                         # Express API Server & AI Agents
+│   ├── ai/                         # AI integration and agents
+│   │   ├── prompts/                # Agent prompt templates
+│   │   ├── types.ts                # AI-related type definitions
+│   │   └── utils/                  # AI utility functions
+│   ├── config/                     # Configuration files
+│   ├── database/                   # Database utilities
+│   ├── middleware/                 # Express middleware
+│   ├── routes/                     # API route handlers
+│   ├── services/                   # Business logic services
+│   └── utils/                      # Utility functions
 ├── dist/                           # Compiled JavaScript output
-└── logs/                           # Application logs
+├── logs/                           # Application logs
+└── shared-types/                   # Shared TypeScript types
 ```
 
 ## 🔌 API Documentation
