@@ -1,0 +1,104 @@
+# Settings for Backend (on Cloud Run).
+# See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+runConfig:
+  minInstances: 0
+  startupProbe:
+    initialDelaySeconds: 60 # Attendi 10 secondi prima del primo controllo
+    periodSeconds: 10      # Controlla ogni 5 secondi
+    timeoutSeconds: 4     # Timeout per ogni tentativo di connessione
+    failureThreshold: 5  # Fallisci dopo 10 tentativi falliti (totale 50 secondi di tolleranza)
+    tcpSocket:
+      port: 8080
+  # maxInstances: 100
+  # concurrency: 80
+  # cpu: 1
+  # memoryMiB: 512
+  outputFiles:
+  serverApp:
+    include: [dist, server.js]
+
+# Environment variables and secrets.
+env:
+  - variable: NODE_ENV
+    value: production
+    availability:
+      - BUILD
+      - RUNTIME
+  
+  - variable: FIREBASE_PROJECT_ID
+    value: fissales-chatbot
+    availability:
+      - BUILD
+      - RUNTIME
+  
+  - variable: WEBSHOP_URL
+    value: https://villma-by-chris.myshopify.com
+    availability:
+      - BUILD
+      - RUNTIME
+  
+  - variable: SHOPIFY_API_VERSION
+    value: 2025-04
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: LOG_LEVEL
+    value: info
+    availability:
+      - BUILD
+      - RUNTIME
+  
+  - variable: LOG_FILE
+    value: logs/app.log
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: FIREBASE_PRIVATE_KEY
+    secret: FIREBASE_PRIVATE_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+  
+  - variable: FIREBASE_CLIENT_EMAIL
+    secret: FIREBASE_CLIENT_EMAIL
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: QDRANT_URL
+    secret: QDRANT_URL
+    availability:
+      - BUILD
+      - RUNTIME
+  
+  - variable: QDRANT_API_KEY
+    secret: QDRANT_API_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: OPENAI_API_KEY
+    secret: OPENAI_API_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+  
+  - variable: GOOGLE_API_KEY
+    secret: GOOGLE_API_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+  
+  - variable: OPENROUTER_API_KEY
+    secret: OPENROUTER_API_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: API_TOKEN
+    secret: API_TOKEN
+    availability:
+      - BUILD
+      - RUNTIME

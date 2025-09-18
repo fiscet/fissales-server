@@ -35,7 +35,6 @@ Thumbs.db
 .firebase/
 firebase-debug.log
 firestore-debug.log
-apphosting.yaml
 
 # Database
 *.db
