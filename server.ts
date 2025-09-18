@@ -27,7 +27,11 @@ const PORT = process.env['PORT'] || 8080;
 app.use(helmet());
 app.use(
   cors({
-    origin: 'https://fissales-admin.vercel.app',
+    origin: [
+      'https://fissales-admin.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:3001'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
