@@ -25,10 +25,10 @@ const PORT = process.env['PORT'] || 8080;
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env['NODE_ENV'] === 'production'
-    ? [process.env['WEBSHOP_URL'] || '']
-    : true,
-  credentials: true
+  origin: 'https://fissales-admin.vercel.app',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Rate limiting
