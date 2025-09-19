@@ -1,7 +1,7 @@
 import { Mastra } from '@mastra/core/mastra';
 import { type LogLevel, PinoLogger } from '@mastra/loggers';
 import { storage } from './utils/storage.js';
-import { frontendAgent } from './agents/frontend-agent';
+import { frontendAgent } from './agents/frontend-agent/index.js';
 
 let mastraInstance: Mastra | null = null;
 

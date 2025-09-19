@@ -3,7 +3,7 @@ import { logger } from '../utils/logger.js';
 import { getMastra } from '../ai/mastra.js';
 import { RuntimeContext } from '@mastra/core/runtime-context';
 import { getCompanyInfoCached } from '../utils/company-cache.js';
-import { MastraContext } from '@/types/index.js';
+import { MastraContext } from '../types/index.js';
 
 const router = Router();
 

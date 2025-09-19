@@ -1,7 +1,7 @@
 import { Memory } from '@mastra/memory';
 import { RuntimeContext } from '@mastra/core/runtime-context';
-import { MastraContext } from '@/types';
-import { storage } from '@/ai/utils/storage.js';
+import { MastraContext } from '../../../types/index.js';
+import { storage } from '../../utils/storage.js';
 
 
 export const memory = (runtimeContext: RuntimeContext<MastraContext>) => {

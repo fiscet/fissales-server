@@ -1,5 +1,5 @@
 import { PromptLoader } from "../../utils/prompt-loader.js";
-import { MastraContext } from "@/types";
+import { MastraContext } from "../../../types/index.js";
 import { RuntimeContext } from "@mastra/core/runtime-context";
 
 export const instructions = async (runtimeContext: RuntimeContext<MastraContext>) => {
