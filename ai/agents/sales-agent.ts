@@ -1,6 +1,6 @@
 import { openai } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
-import { PromptLoader } from '../utils/prompt-loader';
+import { PromptLoader } from '../utils/prompt-loader.js';
 
 export const salesAgent = new Agent({
   name: 'sales-agent',
@@ -12,7 +12,7 @@ export const salesAgent = new Agent({
     );
     const companyDescription = String(
       runtimeContext?.get('companyDescription') ||
-        'Winter sports equipment retailer'
+      'Winter sports equipment retailer'
     );
     const userMessage = String(runtimeContext?.get('userMessage') || '');
     const conversationHistory = String(

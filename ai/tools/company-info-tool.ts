@@ -1,6 +1,6 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
-import { getSingleCompanyInfo } from '../../database/utils';
+import { getSingleCompanyInfo } from '../../database/utils.js';
 
 // Tool to fetch company information from the database
 export const companyInfoTool: ReturnType<typeof createTool> = createTool({

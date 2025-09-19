@@ -1,4 +1,4 @@
-import { PromptLoader } from "@/ai/utils/prompt-loader";
+import { PromptLoader } from "../../utils/prompt-loader.js";
 import { MastraContext } from "@/types";
 import { RuntimeContext } from "@mastra/core/runtime-context";
 
