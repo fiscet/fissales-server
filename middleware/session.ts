@@ -104,9 +104,6 @@ export const trackSessionActivity = async (
   res.send = function (data) {
     // Track session activity before sending response
     if (req.sessionId) {
-      logger.debug(
-        `Session activity: ${req.sessionId} - ${req.method} ${req.path}`
-      );
     }
 
     return originalSend.call(this, data);

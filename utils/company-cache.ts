@@ -20,13 +20,11 @@ export const getCompanyInfoCached = async (): Promise<CompanyInfo | null> => {
 
   // Controlla se abbiamo una cache valida
   if (companyInfoCache && now - companyInfoCache.timestamp < CACHE_TTL) {
-    logger.debug('Company info retrieved from cache');
     return companyInfoCache.data;
   }
 
   try {
     // Carica i dati dal database
-    logger.debug('Loading company info from database');
     const data = await getSingleCompanyInfo();
 
     // Aggiorna la cache

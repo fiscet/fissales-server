@@ -149,7 +149,6 @@ const makeShopifyRequest = async (
     }
 
     const data = (await response.json()) as any;
-    logger.debug(`Shopify API request successful: ${endpoint}`);
     return data;
   } catch (error) {
     logger.error(`Shopify API request failed: ${endpoint}`, error);

@@ -34,7 +34,8 @@ router.post('/', async (req, res) => {
     logger.info('Chat request received', {
       sessionId,
       userId: userId || 'anonymous',
-      messageLength: message.length
+      messageLength: message.length,
+      message: message
     });
 
     // Get Mastra instance and company data (with cache)
@@ -47,6 +48,10 @@ router.post('/', async (req, res) => {
     runtimeContext.set('userId', userId || 'anonymous');
     runtimeContext.set('companyName', companyInfo?.name || '');
     runtimeContext.set('companyDescription', companyInfo?.description || '');
+
+    // Add threadId and resourceId for memory tools
+    runtimeContext.set('threadId', sessionId);
+    runtimeContext.set('resourceId', userId || 'anonymous');
 
     // Use the main network with runtime context and memory
     const network = mastra.vnext_getNetwork('mainNetwork');
@@ -70,50 +75,67 @@ router.post('/', async (req, res) => {
       runtimeContext,
     });
 
-    logger.info('Chat response generated', {
+    logger.info('Network response generated', {
       sessionId,
       userId: userId || 'anonymous',
-      responseLength: response?.result?.length || 0
+      responseLength: response?.result?.length || 0,
+      responseType: typeof response,
+      responseKeys: response ? Object.keys(response) : 'null',
+      responseContent: response?.result ? String(response.result).substring(0, 200) + '...' : 'No result',
+      task: response?.task,
+      resourceType: response?.resourceType,
+      resourceId: response?.resourceId
     });
 
-    // Handle different response types
-    let responseText = '';
-    let recommendedProducts = [];
-    let reasoning = '';
+    // Extract the structured data from workflow or network response
+    let responseData = {
+      response: 'Thank you for your interest!',
+      recommendedProducts: [],
+      reasoning: '',
+      nextSteps: [],
+      urgencyLevel: 'low'
+    };
 
-    if (response?.result) {
-      // Try to parse as workflow result first
-      try {
-        const workflowResult = JSON.parse(response.result);
-        if (workflowResult.runResult) {
-          // Workflow response with runResult
-          responseText = workflowResult.runResult.salesResponse || 'Thank you for your interest!';
-          recommendedProducts = workflowResult.runResult.recommendedProducts || [];
-          reasoning = workflowResult.runResult.reasoning || '';
-        } else if (workflowResult.salesResponse || workflowResult.recommendedProducts) {
-          // Direct workflow response
-          responseText = workflowResult.salesResponse || 'Thank you for your interest!';
-          recommendedProducts = workflowResult.recommendedProducts || [];
-          reasoning = workflowResult.reasoning || '';
-        } else {
-          // Plain text response
-          responseText = response.result;
-        }
-      } catch (error) {
-        // If parsing fails, treat as plain text
-        responseText = response.result;
+    if (isProductRequest) {
+      // Handle workflow response
+      if (response?.runResult) {
+        responseData.response = response.runResult.salesResponse || responseData.response;
+        responseData.recommendedProducts = response.runResult.recommendedProducts || [];
+        responseData.reasoning = response.runResult.reasoning || '';
+        responseData.nextSteps = response.runResult.nextSteps || [];
+        responseData.urgencyLevel = response.runResult.urgencyLevel || 'low';
       }
-    } else if (response?.result) {
-      // Agent response
-      responseText = response.result;
     } else {
-      responseText = 'Thank you for your interest!';
+      // Handle network response
+      if (response?.result) {
+        try {
+          // Parse the workflow result to extract all data
+          const workflowResult = JSON.parse(response.result);
+
+          if (workflowResult.runResult) {
+            // Extract from runResult
+            responseData.response = workflowResult.runResult.salesResponse || responseData.response;
+            responseData.recommendedProducts = workflowResult.runResult.recommendedProducts || [];
+            responseData.reasoning = workflowResult.runResult.reasoning || '';
+            responseData.nextSteps = workflowResult.runResult.nextSteps || [];
+            responseData.urgencyLevel = workflowResult.runResult.urgencyLevel || 'low';
+          } else {
+            // Extract directly from result
+            responseData.response = workflowResult.salesResponse || responseData.response;
+            responseData.recommendedProducts = workflowResult.recommendedProducts || [];
+            responseData.reasoning = workflowResult.reasoning || '';
+            responseData.nextSteps = workflowResult.nextSteps || [];
+            responseData.urgencyLevel = workflowResult.urgencyLevel || 'low';
+          }
+        } catch (error) {
+          // If parsing fails, use the raw result as response
+          responseData.response = response.result;
+        }
+      }
     }
 
     return res.status(200).json({
-      response: responseText,
-      recommendedProducts,
-      reasoning,
+      ...responseData,
       sessionId,
       userId: userId || null,
       timestamp: new Date().toISOString()
@@ -137,6 +159,9 @@ router.post('/clear-cache', async (req, res) => {
 
     // Clear company cache
     invalidateCompanyInfoCache();
+
+    // Clear Mastra instance (will be recreated on next request)
+    // Note: This requires restarting the server to fully clear
 
     logger.info('Caches cleared successfully');
 

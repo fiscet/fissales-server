@@ -50,7 +50,6 @@ export const importAllProducts = async (): Promise<{
           await createProduct(product);
           successCount++;
 
-          logger.debug(`Product imported: ${product.name} (${product.id})`);
         } catch (error) {
           errorCount++;
           logger.error(`Failed to import product ${shopifyProduct.id}:`, error);

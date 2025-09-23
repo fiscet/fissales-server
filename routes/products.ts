@@ -148,16 +148,6 @@ router.post('/sync-to-qdrant', async (req, res) => {
     // Carica i dati in Qdrant
     logger.info('Uploading products to Qdrant');
 
-    // Log detailed parameters for debugging
-    console.log('Qdrant upsert params:', {
-      indexName: QDRANT_COLLECTION,
-      vectorsLength: embeddings.length,
-      metadataLength: metadata.length,
-      idsLength: products.map((p) => p.id).length,
-      firstEmbedding: embeddings[0] ? embeddings[0].slice(0, 5) : 'none',
-      firstMetadata: metadata[0] || 'none',
-      firstId: products[0]?.id || 'none'
-    });
 
     await qdrant.upsert({
       indexName: QDRANT_COLLECTION,
@@ -214,7 +204,6 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
       const collectionInfo = await qdrant.describeIndex({
         indexName: QDRANT_COLLECTION
       });
-      console.log('Collection info:', collectionInfo);
 
       // Check if dimensions match
       if (collectionInfo.dimension !== 1536) {
@@ -272,16 +261,6 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
     // Generate a consistent UUID based on product ID (same product = same UUID)
     const idToInsert = uuidv5(product.id, QDRANT_NAMESPACE);
 
-    console.log('Qdrant upsert validation:', {
-      indexName: QDRANT_COLLECTION,
-      vectorDimension: vectorToInsert.length,
-      vectorSample: vectorToInsert.slice(0, 3),
-      idType: typeof idToInsert,
-      id: idToInsert,
-      metadataKeys: Object.keys(metadata),
-      metadataValues: metadata,
-      textLength: textToEmbed.length
-    });
 
     // Double-check the upsert parameters
     const upsertParams = {
@@ -290,7 +269,6 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
       metadata: [metadata],
       ids: [idToInsert]
     };
-    console.log('Final upsert params:', JSON.stringify(upsertParams, null, 2));
 
     try {
       const upsertResult = await qdrant.upsert({
@@ -299,7 +277,6 @@ router.post('/:productId/sync-to-qdrant', async (req, res) => {
         metadata: [metadata],
         ids: [idToInsert]
       });
-      console.log('✅ Qdrant upsert successful:', upsertResult);
     } catch (qdrantError: any) {
       console.error('❌ Qdrant upsert error:', qdrantError);
       console.error('Error details:', JSON.stringify(qdrantError, null, 2));

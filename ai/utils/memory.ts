@@ -1,7 +1,7 @@
 import { Memory } from '@mastra/memory';
 import { RuntimeContext } from '@mastra/core/runtime-context';
-import { MastraContext } from '../../../types/index.js';
-import { storage } from '../../utils/storage.js';
+import { MastraContext } from '../../types/index.js';
+import { storage } from './storage.js';
 
 
 export const memory = (runtimeContext: RuntimeContext<MastraContext>) => {
@@ -12,7 +12,8 @@ export const memory = (runtimeContext: RuntimeContext<MastraContext>) => {
     storage,
     options: {
       lastMessages: 10,
-      semanticRecall: { topK: 10, messageRange: 5 },
+      // Disable semantic recall until vector store is configured
+      // semanticRecall: { topK: 10, messageRange: 5 },
       workingMemory: {
         enabled: true,
         scope: isAuthenticated ? 'resource' : 'thread',
@@ -20,7 +21,6 @@ export const memory = (runtimeContext: RuntimeContext<MastraContext>) => {
                   - **Interests**:
                   - **Current Goal**:
                   - **Budget**:
-                  - **Experience Level**: [beginner, intermediate, expert]
                   - **Other Preferences**:
                   `
       }

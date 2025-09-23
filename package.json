@@ -34,10 +34,10 @@
   "dependencies": {
     "@ai-sdk/openai": "^1.0.0",
     "@mastra/core": "^0.16.0",
-    "@mastra/libsql": "0.14.1",
+    "@mastra/libsql": "^0.14.1",
     "@mastra/loggers": "0.10.11",
     "@mastra/memory": "^0.14.4",
-    "@mastra/qdrant": "^0.11.10",
+    "@mastra/qdrant": "^0.11.12",
     "@mastra/rag": "^1.2.4",
     "@mastra/upstash": "0.15.0",
     "@types/compression": "^1.8.1",

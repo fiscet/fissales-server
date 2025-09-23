@@ -49,11 +49,20 @@ class PromptLoaderClass {
       }
 
       this.db = getFirestore();
-      logger.info('Firebase initialized for PromptLoader');
     } catch (error) {
       logger.warn('Failed to initialize Firebase, Firestore features disabled:', error);
       this.db = null;
     }
+  }
+
+  private async loadPromptFromFile(promptName: string): Promise<string> {
+    const promptPath = path.join(this.promptsDir, `${promptName}.prompt`);
+    const promptContent = await fs.promises.readFile(promptPath, 'utf-8');
+
+    // Cache the prompt
+    this.cache.set(promptName, promptContent);
+
+    return promptContent;
   }
 
   async loadPrompt(promptName: string): Promise<string> {
@@ -63,7 +72,12 @@ class PromptLoaderClass {
         return this.cache.get(promptName)!;
       }
 
-      // Try Firestore first (for live updates)
+      // In local environment, only use file system
+      if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'local') {
+        return await this.loadPromptFromFile(promptName);
+      }
+
+      // Try Firestore first (for live updates in production)
       this.initializeFirebase();
       if (this.db) {
         try {
@@ -85,14 +99,7 @@ class PromptLoaderClass {
       }
 
       // Fallback to file system
-      const promptPath = path.join(this.promptsDir, `${promptName}.prompt`);
-      const promptContent = await fs.promises.readFile(promptPath, 'utf-8');
-
-      // Cache the prompt
-      this.cache.set(promptName, promptContent);
-
-      logger.debug(`Prompt loaded from file: ${promptName}`);
-      return promptContent;
+      return await this.loadPromptFromFile(promptName);
     } catch (error) {
       logger.error(`Failed to load prompt: ${promptName}`, error);
       throw error;
@@ -137,8 +144,7 @@ class PromptLoaderClass {
 
   async syncFileToFirestore(promptName: string): Promise<void> {
     try {
-      const promptPath = path.join(this.promptsDir, `${promptName}.prompt`);
-      const content = await fs.promises.readFile(promptPath, 'utf-8');
+      const content = await this.loadPromptFromFile(promptName);
       await this.savePromptToFirestore(promptName, content);
       logger.info(`Synced file to Firestore: ${promptName}`);
     } catch (error) {

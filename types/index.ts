@@ -127,4 +127,6 @@ export interface MastraContext {
   userId?: string;
   companyName?: string;
   companyDescription?: string;
+  threadId?: string;
+  resourceId?: string;
 }
