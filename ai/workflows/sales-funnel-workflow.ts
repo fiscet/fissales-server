@@ -68,8 +68,9 @@ const presalesStep = createStep({
       price: z.string(),
       features: z.array(z.string()),
       benefits: z.array(z.string()),
-      availability: z.string()
-    })),
+      availability: z.string(),
+      productUrl: z.string()
+    })).max(5),
     reasoning: z.string().describe('Why these products match customer needs'),
     readyForSales: z.boolean()
   }),
@@ -93,7 +94,8 @@ const presalesStep = createStep({
 
       const parsed = JSON.parse(jsonString);
       if (parsed.recommendedProducts) {
-        recommendedProducts = parsed.recommendedProducts;
+        // Limit to maximum 5 products
+        recommendedProducts = parsed.recommendedProducts.slice(0, 5);
         reasoning = parsed.reasoning || 'Products matched based on customer needs';
         readyForSales = parsed.readyForSales !== false;
       } else {
@@ -135,8 +137,9 @@ const salesStep = createStep({
       price: z.string(),
       features: z.array(z.string()),
       benefits: z.array(z.string()),
-      availability: z.string()
-    })),
+      availability: z.string(),
+      productUrl: z.string()
+    })).max(5),
     reasoning: z.string(),
     readyForSales: z.boolean()
   }),
@@ -150,7 +153,8 @@ const salesStep = createStep({
       price: z.string(),
       features: z.array(z.string()),
       benefits: z.array(z.string()),
-      availability: z.string()
+      availability: z.string(),
+      productUrl: z.string()
     }))
   }),
   execute: async ({ inputData }) => {
@@ -173,7 +177,7 @@ const salesStep = createStep({
 
 // Create the complete sales funnel workflow
 export const salesFunnelWorkflow = createWorkflow({
-  id: 'sales-funnel',
+  id: 'salesFunnelWorkflow',
   description: 'Complete sales funnel workflow: Frontend discovery → Presales research → Sales closing',
   inputSchema: z.object({
     customerMessage: z.string().describe('The customer\'s initial message or request'),
@@ -194,8 +198,9 @@ export const salesFunnelWorkflow = createWorkflow({
       price: z.string(),
       features: z.array(z.string()),
       benefits: z.array(z.string()),
-      availability: z.string()
-    })),
+      availability: z.string(),
+      productUrl: z.string()
+    })).max(5),
     salesResponse: z.string(),
     nextSteps: z.array(z.string()),
     urgencyLevel: z.enum(['low', 'medium', 'high'])

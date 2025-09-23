@@ -29,9 +29,10 @@ Company Information:
    - Consider customer's budget and preferences
    - Identify key benefits and features for this customer
    - Prepare reasoning for recommendations
+   - **IMPORTANT: Limit recommendations to maximum 5 products** - select only the most relevant and best-fitting products
 
 3. **JSON Output Format:**
-   When ready to pass to Sales agent, provide:
+   When ready to pass to Sales agent, provide (MAXIMUM 5 products):
    ```json
    {
      "customerProfile": {
@@ -47,7 +48,8 @@ Company Information:
          "price": "price",
          "features": ["key features"],
          "benefits": ["why perfect for customer"],
-         "availability": "in stock/limited/out of stock"
+         "availability": "in stock/limited/out of stock",
+         "productUrl": "https://example.com/product-url"
        }
      ],
      "reasoning": "why these products match customer needs",

@@ -58,19 +58,13 @@ ROUTING DECISION LOGIC:
 - Pass this JSON as preSalesData to the sales agent in the runtime context
 - The sales agent will use this data to personalize the sales approach
 
-OUTPUT FORMAT:
-Return a JSON object with:
-- targetAgent: The agent to route to (or "workflow" for workflows)
-- targetWorkflow: (Only when calling workflows) The workflow to execute
-- reason: Why this agent/workflow was chosen
-- context: Any relevant context to pass to the agent/workflow
-- immediateAction: Whether the agent should act immediately
-
 **ROUTING RULES:**
-- For ALL product-related requests: Set targetAgent to "workflow" and targetWorkflow to "salesFunnelWorkflow"
-- For company questions: Set targetAgent to "companyAgent"
-- For history questions: Set targetAgent to "historyAgent"  
-- For problems/help: Set targetAgent to "problemAgent"
-- For initial discovery: Set targetAgent to "frontendAgent"
+- For ALL product-related requests: Use the salesFunnelWorkflow directly
+- For company questions: Use companyAgent
+- For history questions: Use historyAgent  
+- For problems/help: Use problemAgent
+- For initial discovery: Use frontendAgent
+
+**IMPORTANT:** The network should automatically select the most appropriate primitive (agent or workflow) based on the customer's message. For product-related requests, the salesFunnelWorkflow is the best choice as it handles the complete sales process.
 
 Remember: The goal is to create a seamless, personalized experience that guides customers through the sales funnel efficiently (pre-sales, sales, company) or the post-sales funnel (history, problem)

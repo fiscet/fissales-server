@@ -48,6 +48,11 @@ router.post('/', async (req, res) => {
     runtimeContext.set('companyName', companyInfo?.name || '');
     runtimeContext.set('companyDescription', companyInfo?.description || '');
 
+    // Initialize response variables
+    let responseText = '';
+    let recommendedProducts = [];
+    let reasoning = '';
+
     // Use the main network with runtime context and memory
     const network = mastra.vnext_getNetwork('mainNetwork');
 
@@ -66,49 +71,78 @@ router.post('/', async (req, res) => {
       networkName: network.name
     });
 
-    const response = await network.generate(message, {
-      runtimeContext,
-    });
+    try {
+      const response = await network.generate(message, {
+        runtimeContext,
+      });
 
-    logger.info('Chat response generated', {
-      sessionId,
-      userId: userId || 'anonymous',
-      responseLength: response?.result?.length || 0
-    });
+      // Handle different response types
+      if (response?.result) {
+        // Try to parse as workflow result first
+        try {
+          const workflowResult = JSON.parse(response.result);
+          if (workflowResult.runResult) {
+            // Workflow response with runResult
+            responseText = workflowResult.runResult.salesResponse || 'Thank you for your interest!';
+            recommendedProducts = workflowResult.runResult.recommendedProducts || [];
+            reasoning = workflowResult.runResult.reasoning || '';
+          } else if (workflowResult.salesResponse || workflowResult.recommendedProducts) {
+            // Direct workflow response
+            responseText = workflowResult.salesResponse || 'Thank you for your interest!';
+            recommendedProducts = workflowResult.recommendedProducts || [];
+            reasoning = workflowResult.reasoning || '';
+          } else {
+            // Plain text response
+            responseText = response.result;
+          }
+        } catch (error) {
+          // If parsing fails, treat as plain text
+          responseText = response.result;
+        }
+      } else if (response?.result) {
+        // Agent response
+        responseText = response.result;
+      } else {
+        responseText = 'Thank you for your interest!';
+      }
+    } catch (networkError) {
+      logger.error('Network execution failed, falling back to workflow', {
+        error: networkError instanceof Error ? networkError.message : 'Unknown error'
+      });
 
-    // Handle different response types
-    let responseText = '';
-    let recommendedProducts = [];
-    let reasoning = '';
+      // Fallback to direct workflow execution
+      const workflow = mastra.getWorkflow('salesFunnelWorkflow');
 
-    if (response?.result) {
-      // Try to parse as workflow result first
-      try {
-        const workflowResult = JSON.parse(response.result);
-        if (workflowResult.runResult) {
-          // Workflow response with runResult
-          responseText = workflowResult.runResult.salesResponse || 'Thank you for your interest!';
-          recommendedProducts = workflowResult.runResult.recommendedProducts || [];
-          reasoning = workflowResult.runResult.reasoning || '';
-        } else if (workflowResult.salesResponse || workflowResult.recommendedProducts) {
-          // Direct workflow response
+      if (workflow) {
+        logger.info('Executing workflow directly as fallback');
+
+        const run = await workflow.createRunAsync();
+        const result = await run.start({
+          inputData: {
+            customerMessage: message,
+            sessionId: sessionId,
+            userId: userId || 'anonymous'
+          },
+        });
+
+        if (result && result.status === 'success' && result.result) {
+          const workflowResult = result.result;
           responseText = workflowResult.salesResponse || 'Thank you for your interest!';
           recommendedProducts = workflowResult.recommendedProducts || [];
           reasoning = workflowResult.reasoning || '';
         } else {
-          // Plain text response
-          responseText = response.result;
+          responseText = 'Thank you for your interest!';
         }
-      } catch (error) {
-        // If parsing fails, treat as plain text
-        responseText = response.result;
+      } else {
+        responseText = 'Thank you for your interest!';
       }
-    } else if (response?.result) {
-      // Agent response
-      responseText = response.result;
-    } else {
-      responseText = 'Thank you for your interest!';
     }
+
+    logger.info('Chat response generated', {
+      sessionId,
+      userId: userId || 'anonymous',
+      responseLength: responseText.length
+    });
 
     return res.status(200).json({
       response: responseText,
