@@ -49,7 +49,8 @@ Company Information:
          "features": ["key features"],
          "benefits": ["why perfect for customer"],
          "availability": "in stock/limited/out of stock",
-         "productUrl": "https://example.com/product-url"
+         "productUrl": "https://example.com/product-url",
+         "imageUrl": "https://example.com/image-url"
        }
      ],
      "reasoning": "why these products match customer needs",
