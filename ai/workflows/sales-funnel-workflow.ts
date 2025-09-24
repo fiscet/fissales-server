@@ -69,7 +69,8 @@ const presalesStep = createStep({
       features: z.array(z.string()),
       benefits: z.array(z.string()),
       availability: z.string(),
-      productUrl: z.string()
+      productUrl: z.string(),
+      imageUrl: z.string()
     })).max(5),
     reasoning: z.string().describe('Why these products match customer needs'),
     readyForSales: z.boolean()
@@ -138,7 +139,8 @@ const salesStep = createStep({
       features: z.array(z.string()),
       benefits: z.array(z.string()),
       availability: z.string(),
-      productUrl: z.string()
+      productUrl: z.string(),
+      imageUrl: z.string()
     })).max(5),
     reasoning: z.string(),
     readyForSales: z.boolean()
@@ -154,7 +156,8 @@ const salesStep = createStep({
       features: z.array(z.string()),
       benefits: z.array(z.string()),
       availability: z.string(),
-      productUrl: z.string()
+      productUrl: z.string(),
+      imageUrl: z.string()
     }))
   }),
   execute: async ({ inputData }) => {
@@ -199,7 +202,8 @@ export const salesFunnelWorkflow = createWorkflow({
       features: z.array(z.string()),
       benefits: z.array(z.string()),
       availability: z.string(),
-      productUrl: z.string()
+      productUrl: z.string(),
+      imageUrl: z.string()
     })).max(5),
     salesResponse: z.string(),
     nextSteps: z.array(z.string()),

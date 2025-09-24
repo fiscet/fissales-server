@@ -2,7 +2,7 @@
   "apphosting": [
     {
       "app": "fissales-chatbot",
-      "project": "fissales-server",
+      "project": "FisSalesChatbotApp",
       "source": ".",
       "backendId": "fissales-server",
       "rootDir": "./",
