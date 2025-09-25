@@ -1,18 +1,18 @@
 # Settings for Backend (on Cloud Run).
 # See https://firebase.google.com/docs/app-hosting/configure#cloud-run
 runConfig:
-  minInstances: 0
+  minInstances: 1  # ✅ Mantieni sempre 1 istanza attiva
+  maxInstances: 10  # ✅ Limita le istanze
+  concurrency: 10  # ✅ 10 richieste per istanza
+  cpu: 1  # ✅ 1 CPU
+  memoryMiB: 1024  # ✅ 1GB RAM
   startupProbe:
-    initialDelaySeconds: 60 # Attendi 10 secondi prima del primo controllo
-    periodSeconds: 10 # Controlla ogni 5 secondi
-    timeoutSeconds: 4 # Timeout per ogni tentativo di connessione
-    failureThreshold: 5 # Fallisci dopo 10 tentativi falliti (totale 50 secondi di tolleranza)
+    initialDelaySeconds: 10  # ✅ Ridotto da 60 a 10 secondi
+    periodSeconds: 5  # ✅ Controlla ogni 5 secondi
+    timeoutSeconds: 3  # ✅ Timeout 3 secondi
+    failureThreshold: 3  # ✅ Fallisci dopo 3 tentativi
     tcpSocket:
       port: 8080
-  # maxInstances: 100
-  # concurrency: 80
-  # cpu: 1
-  # memoryMiB: 512
   outputFiles:
   serverApp:
     include: [dist, server.js]
