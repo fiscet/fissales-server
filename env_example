@@ -26,6 +26,18 @@ WEBSHOP_URL=https://your-shop.myshopify.com
 API_TOKEN=shpat_your-shopify-api-token-here
 SHOPIFY_API_VERSION=2025-04
 
+# WooCommerce Configuration
+WOOCOMMERCE_URL=https://your-store.com
+WOOCOMMERCE_CONSUMER_KEY=ck_your-consumer-key-here
+WOOCOMMERCE_CONSUMER_SECRET=cs_your-consumer-secret-here
+WOOCOMMERCE_API_VERSION=wc/v3
+WOOCOMMERCE_VERIFY_SSL=true
+WOOCOMMERCE_TIMEOUT=30000
+
+# For HTTP (non-HTTPS) stores, use:
+# WOOCOMMERCE_URL=http://your-store.com
+# WOOCOMMERCE_VERIFY_SSL=false
+
 # Qdrant Configuration
 QDRANT_URL=https://your-cluster.qdrant.io:6333
 QDRANT_API_KEY=your-qdrant-api-key-here
