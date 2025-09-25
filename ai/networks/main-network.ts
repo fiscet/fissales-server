@@ -27,7 +27,7 @@ export const mainNetwork = new NewAgentNetwork({
 
     return prompt;
   },
-  model: openai('gpt-4o'),
+  model: openai('gpt-4o-mini'),  // ✅ Cambiato da gpt-4o a gpt-4o-mini (3x più veloce)
   agents: {
     frontendAgent,
     presalesAgent,

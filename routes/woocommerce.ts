@@ -14,7 +14,7 @@ import {
   getCompanyInfo,
   updateSyncMetadata
 } from '../database/utils.js';
-import { WooCommerceErrorType } from '../utils/woocommerce-errors.js';
+// Removed woocommerce-errors import - using simple error handling
 
 const router = Router();
 
