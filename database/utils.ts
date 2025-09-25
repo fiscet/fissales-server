@@ -304,7 +304,7 @@ interface SyncMetadata {
 }
 
 export const updateSyncMetadata = async (
-  type: 'shopify' | 'qdrant'
+  type: 'shopify' | 'qdrant' | 'woocommerce'
 ): Promise<void> => {
   try {
     const db = getFirestoreInstance();
@@ -318,6 +318,8 @@ export const updateSyncMetadata = async (
 
     if (type === 'shopify') {
       updateData.lastShopifySync = new Date();
+    } else if (type === 'woocommerce') {
+      updateData.lastWooCommerceSync = new Date();
     } else {
       updateData.lastQdrantSync = new Date();
     }

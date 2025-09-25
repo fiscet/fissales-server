@@ -8,6 +8,7 @@ import { logger } from './utils/logger.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { healthRouter } from './routes/health.js';
 import { shopifyRouter } from './routes/shopify.js';
+import { woocommerceRouter } from './routes/woocommerce.js';
 import { chatRouter } from './routes/chat.js';
 import { docsRouter } from './routes/docs.js';
 import { performanceRouter } from './routes/performance.js';
@@ -75,6 +76,7 @@ app.use((req, _res, next) => {
 // Routes
 app.use('/api/health', healthRouter);
 app.use('/api/shopify', shopifyRouter);
+app.use('/api/woocommerce', woocommerceRouter);
 app.use('/api/chat', chatRouter); // Main chat endpoint
 app.use('/api/company', companyRouter); // Company information management
 app.use('/api/prompts', promptsRouter); // Prompt management API
