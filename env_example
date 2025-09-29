@@ -3,9 +3,9 @@ PORT=3000
 NODE_ENV=development
 
 # Firebase Configuration (Admin SDK)
-FIREBASE_PROJECT_ID="your-project-id"
+FIREBASE_PROJECT_ID="fissales-chatbot"
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_HERE\n-----END PRIVATE KEY-----\n"
-FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your-project-id.iam.gserviceaccount.com
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@fissales-chatbot.iam.gserviceaccount.com
 
 # Firebase Web App Configuration
 FIREBASE_API_KEY=your-firebase-web-api-key-here

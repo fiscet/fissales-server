@@ -1,0 +1,61 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Regole per la collezione user_roles
+    match /user_roles/{userId} {
+      // Solo gli utenti autenticati possono leggere i ruoli
+      allow read: if request.auth != null;
+      
+      // Solo gli admin possono creare, aggiornare o eliminare ruoli
+      allow write: if request.auth != null 
+        && exists(/databases/$(database)/documents/user_roles/$(request.auth.uid))
+        && get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Regole per le sessioni di chat
+    match /chat_sessions/{sessionId} {
+      // Gli utenti possono leggere solo le proprie sessioni
+      allow read: if request.auth != null 
+        && resource.data.userId == request.auth.uid;
+      
+      // Gli utenti possono creare e aggiornare solo le proprie sessioni
+      allow create, update: if request.auth != null 
+        && request.resource.data.userId == request.auth.uid;
+      
+      // Solo gli admin possono eliminare sessioni
+      allow delete: if request.auth != null 
+        && exists(/databases/$(database)/documents/user_roles/$(request.auth.uid))
+        && get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Regole per i log delle attività
+    match /activity_logs/{logId} {
+      // Solo gli admin possono leggere i log
+      allow read: if request.auth != null 
+        && exists(/databases/$(database)/documents/user_roles/$(request.auth.uid))
+        && get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.role == 'admin';
+      
+      // Solo gli admin possono scrivere nei log
+      allow write: if request.auth != null 
+        && exists(/databases/$(database)/documents/user_roles/$(request.auth.uid))
+        && get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Regole per le configurazioni
+    match /configurations/{configId} {
+      // Tutti gli utenti autenticati possono leggere le configurazioni
+      allow read: if request.auth != null;
+      
+      // Solo gli admin possono modificare le configurazioni
+      allow write: if request.auth != null 
+        && exists(/databases/$(database)/documents/user_roles/$(request.auth.uid))
+        && get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Regola di fallback: negare tutto il resto
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
