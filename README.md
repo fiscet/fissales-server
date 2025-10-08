@@ -217,6 +217,16 @@ npm run type-check   # TypeScript type checking
 npm run clean        # Clean build artifacts and cache
 ```
 
+### Database Management
+
+```bash
+npm run setup-firestore setup    # Setup completo Firestore
+npm run setup-firestore check   # Verifica configurazione
+npm run recreate-firestore recreate  # Ricrea database Firestore
+npm run recreate-firestore test     # Testa connessione database
+npm run recreate-firestore clean    # Pulisce e ricrea tutto
+```
+
 ## 🔧 Configuration
 
 ### Environment Variables
